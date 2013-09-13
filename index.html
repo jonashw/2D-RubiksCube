@@ -11,15 +11,15 @@
 		var cube = new Cube();	
 		window.onload = function(){
 			init("myCanvas",cube,function(){
-				//startDrawing();
+				startDrawing();
 				test();
 			});
 		};
 
 		function test(){
-			cube.rotate(4, true);
-			cube.rotate(4, true);
-			cube.rotate(0, true);
+			cube.rotate("Left", true);
+			cube.rotate("Left", true);
+			cube.rotate("Front", true);
 		}
 	</script>
 </head>
