@@ -1,17 +1,24 @@
 var canvas,ctx;
+var paint;
 function init(id, cube, callback){
 	canvas = document.getElementById(id);
 	canvas.width = 500;
 	canvas.height = 500;
 	ctx = canvas.getContext("2d");
-	function paint(){
+	paint = function(){
 		draw(cube);
 	}
-	setInterval(paint, 500);
-	paint();
 	if(typeof callback === "function"){
 		callback();
 	}
+}
+var drawingInterval;
+function startDrawing(){
+	drawingInterval = setInterval(paint, 500);
+	paint();
+}
+function stopDrawing(){
+	clearInterval(drawingInterval);
 }
 function draw(cube){
 	console.clear();

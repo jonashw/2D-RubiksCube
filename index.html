@@ -4,14 +4,18 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<script type="text/javascript" src="Cube.js"></script>
+	<script type="text/javascript" src="CubeData.js"></script>
+	<script type="text/javascript" src="Face.js"></script>
 	<script type="text/javascript" src="Draw.js"></script>
 	<script type="text/javascript">
 		var cube = new Cube();	
 		window.onload = function(){
 			init("myCanvas",cube,function(){
+				//startDrawing();
 				test();
 			});
 		};
+
 		function test(){
 			cube.rotate(4, true);
 			cube.rotate(4, true);
