@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -12,76 +13,6 @@
 		<div id="qunit"></div>
 		<div id="qunit-fixture"></div>
 		<script src="../core/qunit/qunit.js"></script>
-		<script>
-			var cube = new Cube();
-			var tester = new TripletTester(cube);
-			module("cube movements");
-			test("basics (no moves)",function(){
-				tester.test("FRONT"  ,"TOP" ,threeTimes("White") );
-				tester.test("RIGHT"  ,"TOP" ,threeTimes("Orange"));
-				tester.test("BACK"   ,"TOP" ,threeTimes("Yellow"));
-				tester.test("TOP"    ,"TOP" ,threeTimes("Green") );
-				tester.test("LEFT"   ,"TOP" ,threeTimes("Red")   );
-				tester.test("BOTTOM" ,"TOP" ,threeTimes("Blue")  );
-			});
-			test("front, clockwise rotation",function(){
-				cube.rotate("Front",true);
-				tester.test("FRONT"  ,"TOP" ,threeTimes("White") );
-				tester.test("RIGHT"  ,"TOP" ,["Green","Orange","Orange"]);
-				tester.test("BACK"   ,"TOP" ,threeTimes("Yellow"));
-				tester.test("TOP"    ,"TOP" ,threeTimes("Green"));
-				tester.test("LEFT"   ,"TOP" ,["Red","Red","Blue"]);
-				tester.test("BOTTOM" ,"TOP" ,threeTimes("Orange"));
-			});
-			test("top, clockwise rotation",function(){
-				cube.rotate("Top",true);
-				tester.test("FRONT"  ,"TOP" ,["Green","Orange","Orange"] );
-				tester.test("RIGHT"  ,"TOP" ,threeTimes("Yellow"));
-				tester.test("BACK"   ,"TOP" ,["Red","Red","Blue"]);
-				tester.test("TOP"    ,"TOP" ,["Red","Green","Green"]);
-				tester.test("LEFT"   ,"TOP" ,threeTimes("White"));
-				tester.test("BOTTOM" ,"TOP" ,threeTimes("Orange"));
-			});
-			test("left, counter-clockwise rotation",function(){
-				cube.rotate("Left",false);
-				tester.test("FRONT"  ,"TOP" ,threeTimes("Orange") );
-				tester.test("RIGHT"  ,"TOP" ,threeTimes("Yellow") );
-				tester.test("BACK"   ,"TOP" ,threeTimes("Red") );
-				tester.test("TOP"    ,"TOP" ,threeTimes("Green") );
-				tester.test("LEFT"   ,"TOP" ,["White","Blue","Blue"] );
-				tester.test("BOTTOM" ,"TOP" ,["Yellow","Orange","Orange"] );
-			});
-
-			function TripletTester(cube){
-				var cube = cube;
-				var FACE = {
-					 FRONT  : 0
-					,RIGHT  : 1
-					,BACK   : 2
-					,TOP    : 3
-					,LEFT   : 4
-					,BOTTOM : 5
-				};
-				var TRIPLET = {
-					 TOP    : 'N'
-					,BOTTOM : 'S'
-					,LEFT   : 'W'
-					,RIGHT  : 'E'
-				};
-				this.test = function(face, triplet, expectation){
-					var f = FACE[face];
-					var t = TRIPLET[triplet];
-					deepEqual(
-						 cube.getTriplet(f,t)
-						,expectation
-						,"We expect the " + face + " face's " + triplet + " triplet to be " + expectation
-					);
-				};
-			}
-
-			function threeTimes(item){
-				return [item, item, item];
-			};
-		</script>
+		<script src="tests.js"></script>
 	</body>
 </html>

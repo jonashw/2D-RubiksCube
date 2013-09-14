@@ -42,18 +42,19 @@ function Cube() {
 
 	this.rotate = function(faceId,clockwise){
 		Cube.ENFORCE_VALID_FACE_ID(faceId);
-		var clockwise = typeof clockwise == "undefined" ? true : clockwise;
+		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
 		var faceNumber = Cube.FACE_ID_TO_INDEX(faceId);
 		var face = faceRelations[faceNumber];
 		var self = this;
 		var directions = {
+		 // direction: from the center of the neighbor's face to the triplet of interest
+		 // direction allows the correct triplet to be retrieved below.
 			 N: getCardinalDirection(face.N, faceNumber)
 			,S: getCardinalDirection(face.S, faceNumber)
 			,W: getCardinalDirection(face.W, faceNumber)
 			,E: getCardinalDirection(face.E, faceNumber)
-			                       // direction: from the center of the neighbor's face to the triplet of interest
-								   // direction allows the correct triplet to be retrieved below.
 		};
+		console.log(directions);
 		var current_values = {
 			//neighbor triplets
 			 N: self.getTriplet( face.N, directions.N )
@@ -67,44 +68,26 @@ function Cube() {
 			,e: self.getTriplet( faceNumber, 'E' )
 		};
 
+		//here we write the current_values triplets to their new locations
 		var self = this;
 		(clockwise ? 
 			movements.clockwise :
 			movements.counterclockwise
 		).forEach(function(movement){
-			var reverseTriplet = clockwise;
-			var f = face[movement.from]
-			var t = directions[movement.from];
-			var neighbor_values = current_values[movement.to];
-			var self_values = current_values[movement.to.toLowerCase()];
-			if(reverseTriplet){
-				//neighbor_values = neighbor_values.reverse(); 
-				//self_values = self_values.reverse(); 
-			}
-			self.setTriplet(     f      , t , neighbor_values );
-			self.setTriplet( faceNumber , t ,     self_values );
+			self.setTriplet( face[movement.from] , directions[movement.from] ,        current_values[movement.to]        );//neighbor triplets
+			self.setTriplet(     faceNumber      ,       movement.from       , current_values[movement.to.toLowerCase()] );//this-face triplets
 		});
+		return this;
 	}
-	/*
-	* figure 8.c.
-	*	
-		Tile movement
-		===============================
-		(Clockwise) (Counter-clockwise)
-		----------- -------------------
-		   N -> E          E -> N
-		   E -> S	       S -> E
-		   S -> W	       W -> S
-		   W -> N	       N -> W
-
-	*/
 	var directions = {
-		 N: {horizontal:true,  n:2}
-		,S: {horizontal:true,  n:0}
-		,W: {horizontal:false, n:0}
-		,E: {horizontal:false, n:2}
-		   //horizontal: the tiles in this triplet align horizontally
-		                    //n: the x/y/z slot number to which each tile in the triplet is to be moved 
+		 N: {horizontal:true,  n:2}//North
+		,S: {horizontal:true,  n:0}//South
+		,W: {horizontal:false, n:0}//West
+		,E: {horizontal:false, n:2}//East
+		,M: {horizontal:true,  n:1}//Middle
+		,C: {horizontal:false, n:1}//Center
+		 /*  horizontal: the tiles in this triplet align horizontally
+		                       n: the x/y/z slot number to which each tile in the triplet is to be moved  */
 	};
 	this.getTriplet = function(faceNumber, direction){
 		var dir = directions[direction];
