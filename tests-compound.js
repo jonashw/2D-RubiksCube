@@ -65,6 +65,68 @@ test("LRU",function(){
 		]
 	]);
 });
+test("RUR",function(){
+	var cube = new Cube();
+	cube.rotate(1,true).rotate(4,true).rotate(1,true);
+	faceTest(cube, [
+		[
+			 ["Orange","Orange","Yellow"]
+			,["White","White","Yellow"]
+			,["White","White","Yellow"]
+		],[
+			 ["Orange","Orange","Green"]
+			,["Orange","Orange","Yellow"]
+			,["Orange","Orange","Yellow"]
+		],[
+			 ["White","Red","Red"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["White","White","Blue"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","Orange"]
+			,["Green","Green","Blue"]
+			,["White","White","Blue"]
+		],[
+			 ["Blue","Blue","Green"]
+			,["Blue","Blue","Green"]
+			,["Blue","Blue","Red"]
+		]
+	]);
+});
+test("RURU",function(){
+	var cube = new Cube();
+	cube.rotate(1,true).rotate(4,true).rotate(1,true).rotate(4,true);
+	faceTest(cube, [
+		[
+			 ["Orange","Orange","Green"]
+			,["White","White","Yellow"]
+			,["White","White","Yellow"]
+		],[
+			 ["White","Red","Red"]
+			,["Orange","Orange","Yellow"]
+			,["Orange","Orange","Yellow"]
+		],[
+			 ["White","White","Blue"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["Orange","Orange","Yellow"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["White","Green","Green"]
+			,["White","Green","Green"]
+			,["Blue","Blue","Orange"]
+		],[
+			 ["Blue","Blue","Green"]
+			,["Blue","Blue","Green"]
+			,["Blue","Blue","Red"]
+		]
+	]);
+});
 test("BF\'LUR\'b",function(){
 	var cube = new Cube();
 	cube.rotate(2,true);
