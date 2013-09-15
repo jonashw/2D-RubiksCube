@@ -1,161 +1,120 @@
-function Cube() {
-	var tiles = (function(){
+function Cube(withNumbers) {
+	new Observable(this);
+	this.tiles = (function(){
+		var i = 0;
 		var tiles = [];
 		for(var f=0; f<6; f++){
 			tiles[f] = [];
 			for(var x=0; x<3; x++){
 				tiles[f][x] = [];
 				for(var y=0; y<3; y++){
-					tiles[f][x][y] = Cube.COLORS[f];
+					tiles[f][x][y] = withNumbers ? i : Cube.COLORS[f];
+					i++;
 				}
 			}
 		}
 		return tiles;
 	})();
-	this.tiles = tiles;//expose data so it can be drawn
-
-	//each face has four neighbors, one in each cardinal direction
-	var faceRelations = [
-		 {N:3, S:5, W:4, E:1}
-		,{N:3, S:5, W:0, E:2}
-		,{N:3, S:5, W:1, E:4}
-		,{N:2, S:0, W:4, E:1}
-		,{N:3, S:5, W:2, E:0}
-		,{N:0, S:2, W:4, E:1}
-	];
-
-	//a face can be rotated one of two directions.  a movement direction indicates FROM where a triplet moves TO where a triplet moves.
-	var movements = {
-		clockwise: [
-			 {from:'E',to:'N'}
-			,{from:'S',to:'E'}
-			,{from:'W',to:'S'}
-			,{from:'N',to:'W'}
-		]
-	   	,counterclockwise: [
-			 {from:'E',to:'S'}
-			,{from:'S',to:'W'}
-			,{from:'W',to:'N'}
-			,{from:'N',to:'E'}
-		]
-	};
 
 	this.rotate = function(faceId,clockwise){
 		Cube.ENFORCE_VALID_FACE_ID(faceId);
 		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
-		var faceNumber = Cube.FACE_ID_TO_INDEX(faceId);
-		var face = faceRelations[faceNumber];
-		var self = this;
-		var directions = {
-		 // direction: from the center of the neighbor's face to the triplet of interest
-		 // direction allows the correct triplet to be retrieved below.
-			 N: getCardinalDirection(face.N, faceNumber)
-			,S: getCardinalDirection(face.S, faceNumber)
-			,W: getCardinalDirection(face.W, faceNumber)
-			,E: getCardinalDirection(face.E, faceNumber)
-		};
-		console.log(directions);
-		var current_values = {
-			//neighbor triplets
-			 N: self.getTriplet( face.N, directions.N )
-			,S: self.getTriplet( face.S, directions.S )
-			,W: self.getTriplet( face.W, directions.W )
-			,E: self.getTriplet( face.E, directions.E )
-			//this-face triplets
-			,n: self.getTriplet( faceNumber, 'N' )
-			,s: self.getTriplet( faceNumber, 'S' )
-			,w: self.getTriplet( faceNumber, 'W' )
-			,e: self.getTriplet( faceNumber, 'E' )
-		};
-
-		//here we write the current_values triplets to their new locations
-		var self = this;
-		(clockwise ? 
-			movements.clockwise :
-			movements.counterclockwise
-		).forEach(function(movement){
-			self.setTriplet( face[movement.from] , directions[movement.from] ,        current_values[movement.to]        );//neighbor triplets
-			self.setTriplet(     faceNumber      ,       movement.from       , current_values[movement.to.toLowerCase()] );//this-face triplets
-		});
+		var relations = Cube.FACE_RELATIONS[faceId];
+		//SELF TRIPLETS
+		var selfTriplets = [];
+		//read each triplet, save as we go
+		for(var r=0; r<3; r++){
+			selfTriplets.push( this.getTriplet(faceId, true, r) );
+		}
+		//set each triplet, using the data we saved, according to movement parameters
+		var selfMovements = Cube.SELF_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
+		for(var m in selfMovements){
+			var movement = selfMovements[m];
+			this.setTriplet(faceId, false, movement.to, selfTriplets[movement.from]);
+		}
+		
+		//NEIGHBOR TRIPLETS
+		var relation;
+		var neighborTriplets = {};
+		//read each triplet, save as we go
+		for(var d in relations){
+			relation = relations[d];
+			neighborTriplets[d] = this.getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
+			if(relation.axisIsReversed){ neighborTriplets[d] = neighborTriplets[d].reverse(); }
+		}
+		var movements = Cube.NEIGHBOR_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
+		var movement;
+		//set each triplet, using the data we saved, according to movement parameters
+		for(var m = 0; m<4; m++){
+			movement = movements[m];
+			relationTo = relations[movement.to];
+			var neighborTriplet = neighborTriplets[movement.from];
+			if(relationTo.axisIsReversed){ neighborTriplet = neighborTriplet.reverse(); }
+			this.setTriplet(relationTo.relatedFace, relationTo.axisIsRow, relationTo.relatedIndex, neighborTriplet);
+		}
+		this.notifyObservers('change');
 		return this;
 	}
-	var directions = {
-		 N: {horizontal:true,  n:2}//North
-		,S: {horizontal:true,  n:0}//South
-		,W: {horizontal:false, n:0}//West
-		,E: {horizontal:false, n:2}//East
-		,M: {horizontal:true,  n:1}//Middle
-		,C: {horizontal:false, n:1}//Center
-		 /*  horizontal: the tiles in this triplet align horizontally
-		                       n: the x/y/z slot number to which each tile in the triplet is to be moved  */
+	this.getTriplet = function(faceId, isRow, index){
+		var result = [];
+		var face = this.tiles[faceId];
+		if(isRow){
+			for(var i=0; i<3; i++) result.push(face[index][i]);
+		} else {
+			for(var i=0; i<3; i++) result.push(face[i][index]);
+		}
+		return result;
 	};
-	this.getTriplet = function(faceNumber, direction){
-		var dir = directions[direction];
-		var results = [];
-		for(var i=0; i<3; i++){
-			results.push(dir.horizontal ?
-				tiles[faceNumber][i][dir.n]
-				:
-				tiles[faceNumber][dir.n][i]
-			);
+	this.setTriplet = function(faceId, isRow, index, triplet){
+		if(triplet === undefined || triplet.length != 3){ throw("triplet data must be an array of size 3"); }
+		if(isRow){
+			this.tiles[faceId][index] = triplet;
+		} else {
+			for(var i=0; i<3; i++) this.tiles[faceId][i][index] = triplet[i];
 		}
-		return results;
-	};
-	this.setTriplet = function(faceNumber, direction, values){
-		var dir = directions[direction];
-		if(values.length != 3){
-			throw("values must be an array of length 3");
-		}
-		for(var i=0; i<3; i++){
-			if(dir.horizontal){
-				tiles[faceNumber][i][dir.n] = values[i];
-			} else {
-				tiles[faceNumber][dir.n][i] = values[i];
-			};
-		}
-	};
-	var readFaceTriplet = (function(){
-		return function(n,direction,fn){//provides read/write hooks to a particular 3 slots on a face
-			//get the face related to face n via direction...
-			var faceRelation = faceRelations[n];
-			var otherFace = faceRelation[direction];
-			var otherDirection = getCardinalDirection(otherFace,n);
-			var cfg = directions[otherDirection];
-			return mapThree(cfg.horizontal ? function(x){
-				return tiles[otherFace][x][cfg.i];
-			} : function(y){
-				return tiles[otherFace][cfg.i][y];	
-			});
-		};
-	})();
-	function getCardinalDirection(from,to){
-		var arr = faceRelations[from];
-		for(var k in arr){
-			if(arr[k] == to){
-				return k;
-			}
-		}
-		return null;
-	}
-	this.toData = function(){
-		var faces = [];
-		for(var i=0; i<6; i++){
-			var grid = tiles[i];
-			var flatenned_tiles = grid.reduce(function(acc,rows){
-				return acc.concat(rows);
-			},[]);
-			faces.push(new Face(flatenned_tiles));
-		}
-		return new CubeData(faces);
 	};
 }
+Cube.SELF_MOVEMENTS = {
+	CLOCKWISE: [
+		 {from:0, to:2}
+		,{from:1, to:1}
+		,{from:2, to:0}
+	]
+	,COUNTERCLOCKWISE: [
+		 {from:0, to:0}
+		,{from:1, to:1}
+		,{from:2, to:2}
+	]
+};
+Cube.NEIGHBOR_MOVEMENTS = {
+	CLOCKWISE: [
+		 {from:"N", to:"E"}
+		,{from:"E", to:"S"}
+		,{from:"S", to:"W"}
+		,{from:"W", to:"N"}
+	]
+	,COUNTERCLOCKWISE: [
+		 {from:"N", to:"W"}
+		,{from:"W", to:"S"}
+		,{from:"S", to:"E"}
+		,{from:"E", to:"N"}
+	]
+};
 Cube.COLORS = [
 	 "White"
 	,"Orange"
 	,"Yellow"
-	,"Green"
 	,"Red"
+	,"Green"
 	,"Blue"
+];
+Cube.COLOR_CODES = [
+	 "W"
+	,"O"
+	,"Y"
+	,"R"
+	,"G"
+	,"B"
 ];
 Cube.FACES = [
 	 "Front" 
@@ -165,49 +124,59 @@ Cube.FACES = [
 	,"Left"  
 	,"Bottom"
 ];
-Cube.FACE_ID_TO_INDEX = function(id){
-	return Cube.FACES.indexOf(id);
+Cube.TRIPLETS = {
+	HORIZONTAL: [
+		 "Top"
+		,"Middle"
+		,"Bottom"
+	]
+	,VERTICAL: [
+		 "Left"
+		,"Center"
+		,"Right"
+	]
+};
+Cube.COLOR_ID_TO_INDEX = function(id){
+	return Cube.COLORS.indexOf(id);
 };
 Cube.FACE_ID_IS_VALID = function(id){
-	return (id != undefined) && Cube.FACE_ID_TO_INDEX(id) >= 0;
+	return (id != undefined) && (id in [0,1,2,3,4,5]);
 };
 Cube.ENFORCE_VALID_FACE_ID = function(id){
 	if( !Cube.FACE_ID_IS_VALID(id) ){
-		throw("faceId must be a one of: " + Cube.FACES.join(","));
+		throw("faceId must be a one of: 0,1,2,3,4,5");
 	}
 };
-
-
-function mapThree(mfn){
-	var results = [];
-	for(var i=0; i<3; i++){
-		results.push(mfn(i));
+Cube.FACE_RELATIONS = [
+	{
+		 N: {relatedFace: 4, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false}
+		,S: {relatedFace: 5, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
+		,E: {relatedFace: 1, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
+		,W: {relatedFace: 3, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
+	},{
+		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 2, axisIsReversed: true }
+		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
+		,E: {relatedFace: 2, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
+		,W: {relatedFace: 0, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
+	},{
+		 N: {relatedFace: 4, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
+		,S: {relatedFace: 5, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
+		,E: {relatedFace: 3, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
+		,W: {relatedFace: 1, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
+	},{
+		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
+		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 0, axisIsReversed: true }
+		,E: {relatedFace: 0, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
+		,W: {relatedFace: 2, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
+	},{
+		 N: {relatedFace: 2, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
+		,S: {relatedFace: 0, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
+		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
+		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
+	},{
+		 N: {relatedFace: 0, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false}
+		,S: {relatedFace: 2, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
+		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
+		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
 	}
-	return results;
-}
-function reverseIf(array, bool){
-	return bool ? array : array.reverse();
-}
-/*
- * figure A.
- *
-	[0][1][2]	
-		  [3][4][5]
-
-
- * figure B.a.
- *
-	   [3]         [3]         [3]
-	[4][0][1]---[0][1][2]---[1][2][4]
-	   [5]         [5]         [5]
-								|
-							   [2]         [2]         [2]
-							[1][5][4]---[3][4][5]---[4][3][1]
-							   [0]         [0]         [0]
-
-* figure B.b.
-*
-	   [N]            [2]                  
-	[W] x [E]         [1]         [0][1][2]
-	   [S]            [0]                  
-*/
+];

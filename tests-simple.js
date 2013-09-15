@@ -1,0 +1,279 @@
+module("simple cube movements");
+test("(no moves)",function(){
+	var cube = new Cube();
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	]);
+});
+test("F",function(){
+	var cube = new Cube();
+	cube.rotate(0,true);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Green","Orange","Orange"]
+			,["Green","Orange","Orange"]
+			,["Green","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Blue"]
+			,["Red","Red","Blue"]
+			,["Red","Red","Blue"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Red","Red","Red"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	]);
+});
+test("F\'",function(){
+	var cube = new Cube();
+	cube.rotate(0,false);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Blue","Orange","Orange"]
+			,["Blue","Orange","Orange"]
+			,["Blue","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Green"]
+			,["Red","Red","Green"]
+			,["Red","Red","Green"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Red","Red","Red"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	]);
+});
+test("R",function(){
+	var cube = new Cube();
+	cube.rotate(1,true);
+	faceTest(cube, [
+		[
+			 ["White","White","Blue"]
+			,["White","White","Blue"]
+			,["White","White","Blue"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","White"]
+			,["Green","Green","White"]
+			,["Green","Green","White"]
+		],[
+			 ["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+		]
+	]);
+});
+test("R\'",function(){
+	var cube = new Cube();
+	cube.rotate(1,false);
+	faceTest(cube, [
+		[
+			 ["White","White","Green"]
+			,["White","White","Green"]
+			,["White","White","Green"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Blue","Yellow","Yellow"]
+			,["Blue","Yellow","Yellow"]
+			,["Blue","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","Yellow"]
+			,["Green","Green","Yellow"]
+			,["Green","Green","Yellow"]
+		],[
+			 ["Blue","Blue","White"]
+			,["Blue","Blue","White"]
+			,["Blue","Blue","White"]
+		]
+	]);
+});
+test("B",function(){
+	var cube = new Cube();
+	cube.rotate(2,true);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Orange","Orange","Blue"]
+			,["Orange","Orange","Blue"]
+			,["Orange","Orange","Blue"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Green","Red","Red"]
+			,["Green","Red","Red"]
+			,["Green","Red","Red"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Red","Red","Red"]
+		]
+	]);
+});
+test("B\'",function(){
+	var cube = new Cube();
+	cube.rotate(2,false);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Orange","Orange","Green"]
+			,["Orange","Orange","Green"]
+			,["Orange","Orange","Green"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Blue","Red","Red"]
+			,["Blue","Red","Red"]
+			,["Blue","Red","Red"]
+		],[
+			 ["Red","Red","Red"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Orange","Orange","Orange"]
+		]
+	]);
+});
+test("L",function(){
+	var cube = new Cube();
+	cube.rotate(3,true);
+	faceTest(cube, [
+		[
+			 ["Green","White","White"]
+			,["Green","White","White"]
+			,["Green","White","White"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Blue"]
+			,["Yellow","Yellow","Blue"]
+			,["Yellow","Yellow","Blue"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Yellow","Green","Green"]
+			,["Yellow","Green","Green"]
+			,["Yellow","Green","Green"]
+		],[
+			 ["White","Blue","Blue"]
+			,["White","Blue","Blue"]
+			,["White","Blue","Blue"]
+		]
+	]);
+});
+test("L\'",function(){
+	var cube = new Cube();
+	cube.rotate(3,false);
+	faceTest(cube, [
+		[
+			 ["Blue","White","White"]
+			,["Blue","White","White"]
+			,["Blue","White","White"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Green"]
+			,["Yellow","Yellow","Green"]
+			,["Yellow","Yellow","Green"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["White","Green","Green"]
+			,["White","Green","Green"]
+			,["White","Green","Green"]
+		],[
+			 ["Yellow","Blue","Blue"]
+			,["Yellow","Blue","Blue"]
+			,["Yellow","Blue","Blue"]
+		]
+	]);
+});

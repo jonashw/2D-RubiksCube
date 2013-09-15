@@ -1,0 +1,103 @@
+module("compound cube movements");
+test("FR",function(){
+	var cube = new Cube();
+	cube.rotate(0,true);
+	cube.rotate(1,true);
+	printCube(cube);
+	faceTest(cube, [
+		[
+			 ["White","White","Orange"]
+			,["White","White","Blue"]
+			,["White","White","Blue"]
+		],[
+			 ["Green","Green","Green"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Red","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Blue"]
+			,["Red","Red","Blue"]
+			,["Red","Red","Blue"]
+		],[
+			 ["Green","Green","White"]
+			,["Green","Green","White"]
+			,["Red","Red","White"]
+		],[
+			 ["Orange","Orange","Yellow"]
+			,["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+		]
+	]);
+});
+test("LRU",function(){
+	var cube = new Cube();
+	cube.rotate(3,true);
+	cube.rotate(1,true);
+	cube.rotate(4,true);
+	faceTest(cube, [
+		[
+			 ["Orange","Orange","Orange"]
+			,["Green","White","Blue"]
+			,["Green","White","Blue"]
+		],[
+			 ["Green","Yellow","Blue"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Red","Red","Red"]
+			,["Green","Yellow","Blue"]
+			,["Green","Yellow","Blue"]
+		],[
+			 ["Green","White","Blue"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Green","Green","Green"]
+			,["White","White","White"]
+		],[
+			 ["White","Blue","Yellow"]
+			,["White","Blue","Yellow"]
+			,["White","Blue","Yellow"]
+		]
+	]);
+});
+test("BF\'LUR\'b",function(){
+	var cube = new Cube();
+	cube.rotate(2,true);
+	cube.rotate(0,false);
+	cube.rotate(3,true);
+	cube.rotate(4,true);
+	cube.rotate(1,false);
+	cube.rotate(5,false);
+	faceTest(cube, [
+		[
+			 ["Blue","Orange","Yellow"]
+			,["Green","White","Orange"]
+			,["Yellow","Blue","Blue"]
+		],[
+			 ["Red","Blue","Blue"]
+			,["Yellow","Orange","Orange"]
+			,["Red","Yellow","Red"]
+		],[
+			 ["Red","Green","Green"]
+			,["Blue","Yellow","Blue"]
+			,["Green","Green","Green"]
+		],[
+			 ["Orange","White","White"]
+			,["Red","Red","Red"]
+			,["Orange","White","Orange"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Orange","Green","Yellow"]
+			,["Orange","Green","Green"]
+		],[
+			 ["Blue","White","White"]
+			,["Red","Blue","Red"]
+			,["White","White","White"]
+		]
+	]);
+});
