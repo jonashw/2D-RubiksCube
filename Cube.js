@@ -40,16 +40,27 @@ function Cube(withNumbers) {
 		for(var d in relations){
 			relation = relations[d];
 			neighborTriplets[d] = this.getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
-			if(relation.axisIsReversed){ neighborTriplets[d] = neighborTriplets[d].reverse(); }
+			//if(relation.axisIsReversed){ neighborTriplets[d] = neighborTriplets[d].reverse(); }
 		}
 		var movements = Cube.NEIGHBOR_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
 		var movement;
 		//set each triplet, using the data we saved, according to movement parameters
 		for(var m = 0; m<4; m++){
 			movement = movements[m];
-			relationTo = relations[movement.to];
+			var relationFrom = relations[movement.from];
+			var relationTo = relations[movement.to];
+			//I need the axisIsReversed value between the FROM and TO,which is stored in the FACE_RELATIONS[movement.from], where relatedFace == movement.to
+			//var relations = Cube.FACE_RELATIONS[movement.from];
 			var neighborTriplet = neighborTriplets[movement.from];
-			if(relationTo.axisIsReversed){ neighborTriplet = neighborTriplet.reverse(); }
+			var relationsFrom = Cube.FACE_RELATIONS[relationFrom.relatedFace];
+			var reverseTheTriplet;
+			for (var k in relationsFrom){
+				if(relationsFrom[k].relatedFace == relationTo.relatedFace){
+					reverseTheTriplet = relationsFrom[k].axisIsReversed;
+					break;
+				}
+			}
+			if(reverseTheTriplet){ neighborTriplet = neighborTriplet.reverse(); }
 			this.setTriplet(relationTo.relatedFace, relationTo.axisIsRow, relationTo.relatedIndex, neighborTriplet);
 		}
 		this.notifyObservers('change');
@@ -120,8 +131,8 @@ Cube.FACES = [
 	 "Front" 
 	,"Right" 
 	,"Back"  
-	,"Top"   
 	,"Left"  
+	,"Top"   
 	,"Bottom"
 ];
 Cube.TRIPLETS = {

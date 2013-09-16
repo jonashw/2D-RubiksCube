@@ -65,6 +65,323 @@ test("LRU",function(){
 		]
 	]);
 });
+test("RU",function(){
+	var cube = new Cube();
+	cube.rotate(1,true).rotate(4,true);
+	faceTest(cube, [
+		[
+			 ["Orange","Orange","Orange"]
+			,["White","White","Blue"]
+			,["White","White","Blue"]
+		],[
+			 ["Green","Yellow","Yellow"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Red","Red","Red"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["White","White","Blue"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["White","White","White"]
+		],[
+			 ["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+		]
+	]);
+});
+test("U (numeric checks)",function(){
+	var cube = new Cube(true);
+	var rightTop = cube.tiles[1][0];
+	cube.rotate(4,true);
+	deepEqual(cube.tiles[0][0],rightTop,"top triplet on front face should get the top triplet of the right face, in the same order");
+});
+test("UR",function(){
+	var cube = new Cube();
+	cube.rotate(4,true);
+	cube.rotate(1,true);
+	faceTest(cube, [
+		[
+			 ["Orange","Orange","Blue"]
+			,["White","White","Blue"]
+			,["White","White","Blue"]
+		],[
+			 ["Orange","Orange","Yellow"]
+			,["Orange","Orange","Yellow"]
+			,["Orange","Orange","Yellow"]
+		],[
+			 ["Green","Red","Red"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["White","White","White"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","Orange"]
+			,["Green","Green","White"]
+			,["Green","Green","White"]
+		],[
+			 ["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+			,["Blue","Blue","Red"]
+		]
+	]);
+});
+test("F",function(){
+	var cube = new Cube();
+	cube.rotate(0,true);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Green","Orange","Orange"]
+			,["Green","Orange","Orange"]
+			,["Green","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Blue"]
+			,["Red","Red","Blue"]
+			,["Red","Red","Blue"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Red","Red","Red"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	]);
+});
+test("F\'",function(){
+	var cube = new Cube();
+	cube.rotate(0,false);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Blue","Orange","Orange"]
+			,["Blue","Orange","Orange"]
+			,["Blue","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Green"]
+			,["Red","Red","Green"]
+			,["Red","Red","Green"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Red","Red","Red"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	]);
+});
+test("R",function(){
+	var cube = new Cube();
+	cube.rotate(1,true);
+	faceTest(cube, [
+		[
+			 ["White","White","Blue"]
+			,["White","White","Blue"]
+			,["White","White","Blue"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+			,["Green","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","White"]
+			,["Green","Green","White"]
+			,["Green","Green","White"]
+		],[
+			 ["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+			,["Blue","Blue","Yellow"]
+		]
+	]);
+});
+test("R\'",function(){
+	var cube = new Cube();
+	cube.rotate(1,false);
+	faceTest(cube, [
+		[
+			 ["White","White","Green"]
+			,["White","White","Green"]
+			,["White","White","Green"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Blue","Yellow","Yellow"]
+			,["Blue","Yellow","Yellow"]
+			,["Blue","Yellow","Yellow"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Green","Green","Yellow"]
+			,["Green","Green","Yellow"]
+			,["Green","Green","Yellow"]
+		],[
+			 ["Blue","Blue","White"]
+			,["Blue","Blue","White"]
+			,["Blue","Blue","White"]
+		]
+	]);
+});
+test("B",function(){
+	var cube = new Cube();
+	cube.rotate(2,true);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Orange","Orange","Blue"]
+			,["Orange","Orange","Blue"]
+			,["Orange","Orange","Blue"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Green","Red","Red"]
+			,["Green","Red","Red"]
+			,["Green","Red","Red"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Red","Red","Red"]
+		]
+	]);
+});
+test("B\'",function(){
+	var cube = new Cube();
+	cube.rotate(2,false);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["White","White","White"]
+		],[
+			 ["Orange","Orange","Green"]
+			,["Orange","Orange","Green"]
+			,["Orange","Orange","Green"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Blue","Red","Red"]
+			,["Blue","Red","Red"]
+			,["Blue","Red","Red"]
+		],[
+			 ["Red","Red","Red"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Orange","Orange","Orange"]
+		]
+	]);
+});
+test("L",function(){
+	var cube = new Cube();
+	cube.rotate(3,true);
+	faceTest(cube, [
+		[
+			 ["Green","White","White"]
+			,["Green","White","White"]
+			,["Green","White","White"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Blue"]
+			,["Yellow","Yellow","Blue"]
+			,["Yellow","Yellow","Blue"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["Yellow","Green","Green"]
+			,["Yellow","Green","Green"]
+			,["Yellow","Green","Green"]
+		],[
+			 ["White","Blue","Blue"]
+			,["White","Blue","Blue"]
+			,["White","Blue","Blue"]
+		]
+	]);
+});
+test("L\'",function(){
+	var cube = new Cube();
+	cube.rotate(3,false);
+	faceTest(cube, [
+		[
+			 ["Blue","White","White"]
+			,["Blue","White","White"]
+			,["Blue","White","White"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Yellow","Yellow","Green"]
+			,["Yellow","Yellow","Green"]
+			,["Yellow","Yellow","Green"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red"]
+			,["Red","Red","Red"]
+		],[
+			 ["White","Green","Green"]
+			,["White","Green","Green"]
+			,["White","Green","Green"]
+		],[
+			 ["Yellow","Blue","Blue"]
+			,["Yellow","Blue","Blue"]
+			,["Yellow","Blue","Blue"]
+		]
+	]);
+});
 test("RUR",function(){
 	var cube = new Cube();
 	cube.rotate(1,true).rotate(4,true).rotate(1,true);
@@ -124,6 +441,68 @@ test("RURU",function(){
 			 ["Blue","Blue","Green"]
 			,["Blue","Blue","Green"]
 			,["Blue","Blue","Red"]
+		]
+	]);
+});
+test("BF\'LUR",function(){
+	var cube = new Cube();
+	cube.rotate(2,true).rotate(0,false).rotate(3,true).rotate(4,true).rotate(1,true);
+	faceTest(cube, [
+		[
+			 ["Blue","Orange","Red"]
+			,["Green","White","Blue"]
+			,["Orange","White","Red"]
+		],[
+			 ["Blue","Blue","Yellow"]
+			,["Orange","Orange","Yellow"]
+			,["Blue","Blue","Red"]
+		],[
+			 ["Orange","Green","Green"]
+			,["Orange","Yellow","Blue"]
+			,["Yellow","Yellow","Red"]
+		],[
+			 ["Orange","White","White"]
+			,["Red","Red","Red"]
+			,["Green","Green","Green"]
+		],[
+			 ["Yellow","Yellow","Blue"]
+			,["Orange","Green","White"]
+			,["Orange","Green","White"]
+		],[
+			 ["White","Red","Yellow"]
+			,["White","Blue","Yellow"]
+			,["White","Red","Green"]
+		]
+	]);
+});
+test("BF\'LUR\'",function(){
+	var cube = new Cube();
+	cube.rotate(2,true).rotate(0,false).rotate(3,true).rotate(4,true).rotate(1,false);
+	faceTest(cube, [
+		[
+			 ["Blue","Orange","Yellow"]
+			,["Green","White","Orange"]
+			,["Orange","White","Orange"]
+		],[
+			 ["Red","Blue","Blue"]
+			,["Yellow","Orange","Orange"]
+			,["Yellow","Blue","Blue"]
+		],[
+			 ["Red","Green","Green"]
+			,["Blue","Yellow","Blue"]
+			,["Red","Yellow","Red"]
+		],[
+			 ["Orange","White","White"]
+			,["Red","Red","Red"]
+			,["Green","Green","Green"]
+		],[
+			 ["Yellow","Yellow","Blue"]
+			,["Orange","Green","Yellow"]
+			,["Orange","Green","Green"]
+		],[
+			 ["White","Red","Blue"]
+			,["White","Blue","White"]
+			,["White","Red","White"]
 		]
 	]);
 });
