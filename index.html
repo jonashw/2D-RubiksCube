@@ -4,19 +4,28 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<script type="text/javascript" src="../core/Observable.js"></script>
-	<script type="text/javascript" src="Cube.js"></script>
-	<script type="text/javascript" src="PrintCube.js"></script>
+	<script type="text/javascript" src="RubiksCube.js"></script>
+	<script type="text/javascript" src="RubiksCubePainter.js"></script>
 	<script type="text/javascript">
-		var cube = new Cube(true);	
-		function draw(){
-			console.clear();
-			printCube(cube);
-		}
+		var cube = new RubiksCube();
+		var painter;
+		var ctx;
 		window.onload = function(){
-			cube.on('change',draw);
-			draw();
+ 			painter = new RubiksCubePainter(cube, document.getElementById("rubiks_canvas"), 500, 500);
+			ctx = painter.ctx;
+			painter.paint();
+			cube.on('change',function(){
+				painter.paint();
+			});
+			cube.on('change',function(){
+				if(cube.isSolved()){
+					alert('Congratulations! You have solved the puzzle.');
+				}
+			});
 		};
 	</script>
 </head>
-<body> </body>
+<body>
+	<canvas id="rubiks_canvas"></canvas>
+</body>
 </html>
