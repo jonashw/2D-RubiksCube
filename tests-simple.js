@@ -555,3 +555,127 @@ test("L\' (numeric)",function(){
 		]
 	],true);
 });
+test("b",function(){
+	var cube = new Cube();
+	cube.rotate(5,true);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["Red","Red","Red"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["White","White","White"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red",]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	],true);
+});
+test("b (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(5,true);
+	faceTest(cube, [
+		[
+			 [0,1,2]
+			,[3,4,5]
+			,[33,34,35]
+		],[
+			 [9,10,11]
+			,[12,13,14]
+			,[6,7,8]
+		],[
+			 [18,19,20]
+			,[21,22,23]
+			,[15,16,17]
+		],[
+			 [27,28,29]
+			,[30,31,32]
+			,[24,25,26]
+		],[
+			 [36,37,38]
+			,[39,40,41]
+			,[42,43,44]
+		],[
+			 [51,48,45]
+			,[52,49,46]
+			,[53,50,47]
+		]
+	],true);
+});
+test("b\'",function(){
+	var cube = new Cube();
+	cube.rotate(5,false);
+	faceTest(cube, [
+		[
+			 ["White","White","White"]
+			,["White","White","White"]
+			,["Orange","Orange","Orange"]
+		],[
+			 ["Orange","Orange","Orange"]
+			,["Orange","Orange","Orange"]
+			,["Yellow","Yellow","Yellow"]
+		],[
+			 ["Yellow","Yellow","Yellow"]
+			,["Yellow","Yellow","Yellow"]
+			,["Red","Red","Red"]
+		],[
+			 ["Red","Red","Red"]
+			,["Red","Red","Red",]
+			,["White","White","White"]
+		],[
+			 ["Green","Green","Green"]
+			,["Green","Green","Green"]
+			,["Green","Green","Green"]
+		],[
+			 ["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+			,["Blue","Blue","Blue"]
+		]
+	],true);
+});
+test("b\' (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(5,false);
+	faceTest(cube, [
+		[
+			 [0,1,2]
+			,[3,4,5]
+			,[15,16,17]
+		],[
+			 [9,10,11]
+			,[12,13,14]
+			,[24,25,26]
+		],[
+			 [18,19,20]
+			,[21,22,23]
+			,[33,34,35]
+		],[
+			 [27,28,29]
+			,[30,31,32]
+			,[6,7,8]
+		],[
+			 [36,37,38]
+			,[39,40,41]
+			,[42,43,44]
+		],[
+			 [47,50,53]
+			,[46,49,52]
+			,[45,48,51]
+		]
+	],true);
+});
