@@ -1,4 +1,4 @@
-function printCube(cube,convertColors){
+function printRubiksCube(cube,convertColors){
 	var faces = cube.tiles.map(function(face){
 		return face.map(function(triplet){
 			return triplet.map(function(color){

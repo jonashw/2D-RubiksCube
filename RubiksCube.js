@@ -1,4 +1,4 @@
-function Cube(withNumbers) {
+function RubiksCube(withNumbers) {
 	new Observable(this);
 	this.tiles = (function(){
 		var i = 0;
@@ -8,7 +8,7 @@ function Cube(withNumbers) {
 			for(var x=0; x<3; x++){
 				tiles[f][x] = [];
 				for(var y=0; y<3; y++){
-					tiles[f][x][y] = withNumbers ? i : Cube.COLORS[f];
+					tiles[f][x][y] = withNumbers ? i : RubiksCube.COLORS[f];
 					i++;
 				}
 			}
@@ -26,9 +26,9 @@ function Cube(withNumbers) {
 	};
 
 	this.rotate = function(faceId,clockwise){
-		Cube.ENFORCE_VALID_FACE_ID(faceId);
+		RubiksCube.ENFORCE_VALID_FACE_ID(faceId);
 		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
-		var relations = Cube.FACE_RELATIONS[faceId];
+		var relations = RubiksCube.FACE_RELATIONS[faceId];
 		//SELF TRIPLETS
 		var selfTriplets = [];
 		//read each triplet, save as we go
@@ -36,7 +36,7 @@ function Cube(withNumbers) {
 			selfTriplets.push( this.getTriplet(faceId, true, r) );
 		}
 		//set each triplet, using the data we saved, according to movement parameters
-		var selfMovements = Cube.SELF_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
+		var selfMovements = RubiksCube.SELF_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
 		for(var m in selfMovements){
 			var movement = selfMovements[m];
 			var triplet = selfTriplets[movement.from];
@@ -53,7 +53,7 @@ function Cube(withNumbers) {
 			neighborTriplets[d] = this.getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
 			//if(relation.axisIsReversed){ neighborTriplets[d] = neighborTriplets[d].reverse(); }
 		}
-		var movements = Cube.NEIGHBOR_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
+		var movements = RubiksCube.NEIGHBOR_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
 		var movement;
 		//set each triplet, using the data we saved, according to movement parameters
 		for(var m = 0; m<4; m++){
@@ -62,7 +62,7 @@ function Cube(withNumbers) {
 			var relationTo = relations[movement.to];
 			//I need the axisIsReversed value between the FROM and TO,which is stored in the FACE_RELATIONS[movement.from], where relatedFace == movement.to
 			var neighborTriplet = neighborTriplets[movement.from];
-			var relationsFrom = Cube.FACE_RELATIONS[relationFrom.relatedFace];
+			var relationsFrom = RubiksCube.FACE_RELATIONS[relationFrom.relatedFace];
 			var reverseTheTriplet;
 			for (var k in relationsFrom){
 				if(relationsFrom[k].relatedFace == relationTo.relatedFace){
@@ -95,7 +95,7 @@ function Cube(withNumbers) {
 		}
 	};
 }
-Cube.SELF_MOVEMENTS = {
+RubiksCube.SELF_MOVEMENTS = {
 	CLOCKWISE: [
 		 {from:0, to:2}
 		,{from:1, to:1}
@@ -107,7 +107,7 @@ Cube.SELF_MOVEMENTS = {
 		,{from:2, to:2}
 	]
 };
-Cube.NEIGHBOR_MOVEMENTS = {
+RubiksCube.NEIGHBOR_MOVEMENTS = {
 	CLOCKWISE: [
 		 {from:"N", to:"E"}
 		,{from:"E", to:"S"}
@@ -121,7 +121,7 @@ Cube.NEIGHBOR_MOVEMENTS = {
 		,{from:"E", to:"N"}
 	]
 };
-Cube.COLORS = [
+RubiksCube.COLORS = [
 	 "White"
 	,"Orange"
 	,"Yellow"
@@ -129,7 +129,7 @@ Cube.COLORS = [
 	,"Green"
 	,"Blue"
 ];
-Cube.COLOR_CODES = [
+RubiksCube.COLOR_CODES = [
 	 "W"
 	,"O"
 	,"Y"
@@ -137,7 +137,7 @@ Cube.COLOR_CODES = [
 	,"G"
 	,"B"
 ];
-Cube.FACES = [
+RubiksCube.FACES = [
 	 "Front" 
 	,"Right" 
 	,"Back"  
@@ -145,7 +145,7 @@ Cube.FACES = [
 	,"Top"   
 	,"Bottom"
 ];
-Cube.TRIPLETS = {
+RubiksCube.TRIPLETS = {
 	HORIZONTAL: [
 		 "Top"
 		,"Middle"
@@ -157,18 +157,18 @@ Cube.TRIPLETS = {
 		,"Right"
 	]
 };
-Cube.COLOR_ID_TO_INDEX = function(id){
-	return Cube.COLORS.indexOf(id);
+RubiksCube.COLOR_ID_TO_INDEX = function(id){
+	return RubiksCube.COLORS.indexOf(id);
 };
-Cube.FACE_ID_IS_VALID = function(id){
+RubiksCube.FACE_ID_IS_VALID = function(id){
 	return (id != undefined) && (id in [0,1,2,3,4,5]);
 };
-Cube.ENFORCE_VALID_FACE_ID = function(id){
-	if( !Cube.FACE_ID_IS_VALID(id) ){
+RubiksCube.ENFORCE_VALID_FACE_ID = function(id){
+	if( !RubiksCube.FACE_ID_IS_VALID(id) ){
 		throw("faceId must be a one of: 0,1,2,3,4,5");
 	}
 };
-Cube.FACE_RELATIONS = [
+RubiksCube.FACE_RELATIONS = [
 	{
 		 N: {relatedFace: 4, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false}
 		,S: {relatedFace: 5, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}

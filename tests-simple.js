@@ -1,6 +1,6 @@
 module("simple cube movements");
 test("(no moves)",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	faceTest(cube, [
 		[
 			 ["White","White","White"]
@@ -30,7 +30,7 @@ test("(no moves)",function(){
 	]);
 });
 test("(no moves) (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	faceTest(cube, [
 		[
 			 [0,1,2]
@@ -60,7 +60,7 @@ test("(no moves) (numeric)",function(){
 	],true);
 });
 test("F",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(0,true);
 	faceTest(cube, [
 		[
@@ -91,7 +91,7 @@ test("F",function(){
 	]);
 });
 test("F (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(0,true);
 	faceTest(cube, [
 		[
@@ -122,7 +122,7 @@ test("F (numeric)",function(){
 	],true);
 });
 test("F\'",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(0,false);
 	faceTest(cube, [
 		[
@@ -153,7 +153,7 @@ test("F\'",function(){
 	]);
 });
 test("F\' (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(0,false);
 	faceTest(cube, [
 		[
@@ -184,7 +184,7 @@ test("F\' (numeric)",function(){
 	],true);
 });
 test("R",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(1,true);
 	faceTest(cube, [
 		[
@@ -215,7 +215,7 @@ test("R",function(){
 	]);
 });
 test("R (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(1,true);
 	faceTest(cube, [
 		[
@@ -246,7 +246,7 @@ test("R (numeric)",function(){
 	],true);
 });
 test("R\'",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(1,false);
 	faceTest(cube, [
 		[
@@ -277,7 +277,7 @@ test("R\'",function(){
 	]);
 });
 test("R\' (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(1,false);
 	faceTest(cube, [
 		[
@@ -308,7 +308,7 @@ test("R\' (numeric)",function(){
 	],true);
 });
 test("B",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(2,true);
 	faceTest(cube, [
 		[
@@ -339,7 +339,7 @@ test("B",function(){
 	]);
 });
 test("B (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(2,true);
 	faceTest(cube, [
 		[
@@ -370,7 +370,7 @@ test("B (numeric)",function(){
 	],true);
 });
 test("B\'",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(2,false);
 	faceTest(cube, [
 		[
@@ -401,7 +401,7 @@ test("B\'",function(){
 	]);
 });
 test("B\' (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(2,false);
 	faceTest(cube, [
 		[
@@ -432,7 +432,7 @@ test("B\' (numeric)",function(){
 	],true);
 });
 test("L",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(3,true);
 	faceTest(cube, [
 		[
@@ -463,7 +463,7 @@ test("L",function(){
 	]);
 });
 test("L (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(3,true);
 	faceTest(cube, [
 		[
@@ -494,7 +494,7 @@ test("L (numeric)",function(){
 	],true);
 });
 test("L\'",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(3,false);
 	faceTest(cube, [
 		[
@@ -525,7 +525,7 @@ test("L\'",function(){
 	]);
 });
 test("L\' (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(3,false);
 	faceTest(cube, [
 		[
@@ -556,7 +556,7 @@ test("L\' (numeric)",function(){
 	],true);
 });
 test("b",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(5,true);
 	faceTest(cube, [
 		[
@@ -587,7 +587,7 @@ test("b",function(){
 	],true);
 });
 test("b (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(5,true);
 	faceTest(cube, [
 		[
@@ -618,7 +618,7 @@ test("b (numeric)",function(){
 	],true);
 });
 test("b\'",function(){
-	var cube = new Cube();
+	var cube = new RubiksCube();
 	cube.rotate(5,false);
 	faceTest(cube, [
 		[
@@ -649,7 +649,7 @@ test("b\'",function(){
 	],true);
 });
 test("b\' (numeric)",function(){
-	var cube = new Cube(true);
+	var cube = new RubiksCube(true);
 	cube.rotate(5,false);
 	faceTest(cube, [
 		[
