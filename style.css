@@ -1,0 +1,19 @@
+#rubiks_canvs, #controls {
+	float:left;
+}
+
+#controls {
+	background:#f0f0f0;
+	padding:3em;
+	margin:8em;
+}
+
+#controls table th,
+#controls table td {
+	padding:2px;
+}
+
+#controls table th {
+	padding-top:4px;
+	padding-right:10px;
+}
