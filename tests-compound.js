@@ -1,36 +1,3 @@
-/*
-test("F\' (numeric)",function(){
-	var cube = new Cube(true);
-	cube.rotate(0,false);
-	faceTest(cube, [
-		[
-			 []
-			,[]
-			,[]
-		],[
-			 []
-			,[]
-			,[]
-		],[
-			 []
-			,[]
-			,[]
-		],[
-			 []
-			,[]
-			,[]
-		],[
-			 []
-			,[]
-			,[]
-		],[
-			 []
-			,[]
-			,[]
-		]
-	],true);
-});
-*/
 module("compound cube movements");
 test("FR",function(){
 	var cube = new Cube();

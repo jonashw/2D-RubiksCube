@@ -16,6 +16,15 @@ function Cube(withNumbers) {
 		return tiles;
 	})();
 
+	this.isSolved = function(){
+		return this.tiles.every(function(face){
+			var flatface = face.join(",").split(",");
+			return flatface.every(function(c){
+				return c == flatface[0];
+			});
+		});
+	};
+
 	this.rotate = function(faceId,clockwise){
 		Cube.ENFORCE_VALID_FACE_ID(faceId);
 		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
