@@ -7,15 +7,18 @@
 	<script type="text/javascript" src="RubiksCube.js"></script>
 	<script type="text/javascript" src="RubiksCubePainter.js"></script>
 	<script type="text/javascript" src="RubiksControls.js"></script>
+	<script type="text/javascript" src="RubiksKeyboardControls.js"></script>
 	<link rel="stylesheet" href="style.css" />
 	<script type="text/javascript">
 		var cube = new RubiksCube();
 		var controls;
+		var keyControls;
 		var painter;
 		var ctx;
 		window.onload = function(){
  			painter = new RubiksCubePainter(cube, document.getElementById("rubiks_canvas"), 500, 500);
 			controls = new RubiksControls(cube, document.getElementById("controls"));
+			keyControls = new RubiksKeyboardControls(cube);
 			ctx = painter.ctx;
 			painter.paint();
 			cube.on('change',function(){
@@ -30,7 +33,14 @@
 	</script>
 </head>
 <body>
+	<h1>Jon's Rubiks Cube</h1>
+	<div style="text-align:center; padding:1em;">
+		Control by keyboard (JKLI,; for clockwise) (JKLI<: for counter-clockwise), 
+		<br>
+		or with the controls on the left.	
+	</div>
 	<canvas id="rubiks_canvas"></canvas>
-	<div id="controls"></div>
+	<div id="controls">
+	</div>
 </body>
 </html>
