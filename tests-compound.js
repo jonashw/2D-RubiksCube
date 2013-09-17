@@ -1,3 +1,36 @@
+/*
+test("F\' (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(0,false);
+	faceTest(cube, [
+		[
+			 []
+			,[]
+			,[]
+		],[
+			 []
+			,[]
+			,[]
+		],[
+			 []
+			,[]
+			,[]
+		],[
+			 []
+			,[]
+			,[]
+		],[
+			 []
+			,[]
+			,[]
+		],[
+			 []
+			,[]
+			,[]
+		]
+	],true);
+});
+*/
 module("compound cube movements");
 test("FR",function(){
 	var cube = new Cube();
@@ -32,6 +65,38 @@ test("FR",function(){
 		]
 	]);
 });
+test("FR (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(0,true);
+	cube.rotate(1,true);
+	faceTest(cube, [
+		[
+			 [6,3,9]
+			,[7,4,50]
+			,[8,5,53]
+		],[
+			 [44,43,42]
+			,[16,13,10]
+			,[17,14,11]
+		],[
+			 [29,19,20]
+			,[41,22,23]
+			,[38,25,26]
+		],[
+			 [27,28,45]
+			,[30,31,46]
+			,[33,34,47]
+		],[
+			 [36,37,0]
+			,[39,40,1]
+			,[35,32,2]
+		],[
+			 [15,12,24]
+			,[48,49,21]
+			,[51,52,18]
+		]
+	],true);
+});
 test("LRU",function(){
 	var cube = new Cube();
 	cube.rotate(3,true);
@@ -65,6 +130,39 @@ test("LRU",function(){
 		]
 	]);
 });
+test("LRU (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(3,true);
+	cube.rotate(1,true);
+	cube.rotate(4,true);
+	faceTest(cube, [
+		[
+			 [15,12,9]
+			,[39,4,50]
+			,[42,7,53]
+		],[
+			 [44,19,51]
+			,[16,13,10]
+			,[17,14,11]
+		],[
+			 [33,30,27]
+			,[41,22,48]
+			,[38,25,45]
+		],[
+			 [36,1,47]
+			,[34,31,28]
+			,[35,32,29]
+		],[
+			 [20,23,26]
+			,[43,40,37]
+			,[8,5,2]
+		],[
+			 [0,46,24]
+			,[3,49,21]
+			,[6,52,18]
+		]
+	],true);
+});
 test("RU",function(){
 	var cube = new Cube();
 	cube.rotate(1,true).rotate(4,true);
@@ -96,11 +194,36 @@ test("RU",function(){
 		]
 	]);
 });
-test("U (numeric checks)",function(){
+test("RU (numeric)",function(){
 	var cube = new Cube(true);
-	var rightTop = cube.tiles[1][0];
-	cube.rotate(4,true);
-	deepEqual(cube.tiles[0][0],rightTop,"top triplet on front face should get the top triplet of the right face, in the same order");
+	cube.rotate(1,true).rotate(4,true);
+	faceTest(cube, [
+		[
+			 [15,12,9]
+			,[3,4,50]
+			,[6,7,53]
+		],[
+			 [44,19,20]
+			,[16,13,10]
+			,[17,14,11]
+		],[
+			 [27,28,29]
+			,[41,22,23]
+			,[38,25,26]
+		],[
+			 [0,1,47]
+			,[30,31,32]
+			,[33,34,35]
+		],[
+			 [42,39,36]
+			,[43,40,37]
+			,[8,5,2]
+		],[
+			 [45,46,24]
+			,[48,49,21]
+			,[51,52,18]
+		]
+	],true);
 });
 test("UR",function(){
 	var cube = new Cube();
@@ -134,253 +257,37 @@ test("UR",function(){
 		]
 	]);
 });
-test("F",function(){
-	var cube = new Cube();
-	cube.rotate(0,true);
-	faceTest(cube, [
-		[
-			 ["White","White","White"]
-			,["White","White","White"]
-			,["White","White","White"]
-		],[
-			 ["Green","Orange","Orange"]
-			,["Green","Orange","Orange"]
-			,["Green","Orange","Orange"]
-		],[
-			 ["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-		],[
-			 ["Red","Red","Blue"]
-			,["Red","Red","Blue"]
-			,["Red","Red","Blue"]
-		],[
-			 ["Green","Green","Green"]
-			,["Green","Green","Green"]
-			,["Red","Red","Red"]
-		],[
-			 ["Orange","Orange","Orange"]
-			,["Blue","Blue","Blue"]
-			,["Blue","Blue","Blue"]
-		]
-	]);
-});
-test("F\'",function(){
-	var cube = new Cube();
-	cube.rotate(0,false);
-	faceTest(cube, [
-		[
-			 ["White","White","White"]
-			,["White","White","White"]
-			,["White","White","White"]
-		],[
-			 ["Blue","Orange","Orange"]
-			,["Blue","Orange","Orange"]
-			,["Blue","Orange","Orange"]
-		],[
-			 ["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-		],[
-			 ["Red","Red","Green"]
-			,["Red","Red","Green"]
-			,["Red","Red","Green"]
-		],[
-			 ["Green","Green","Green"]
-			,["Green","Green","Green"]
-			,["Orange","Orange","Orange"]
-		],[
-			 ["Red","Red","Red"]
-			,["Blue","Blue","Blue"]
-			,["Blue","Blue","Blue"]
-		]
-	]);
-});
-test("R",function(){
-	var cube = new Cube();
+test("UR (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(4,true);
 	cube.rotate(1,true);
 	faceTest(cube, [
 		[
-			 ["White","White","Blue"]
-			,["White","White","Blue"]
-			,["White","White","Blue"]
+			 [9,10,47]
+			,[3,4,50]
+			,[6,7,53]
 		],[
-			 ["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
+			 [15,12,18]
+			,[16,13,19]
+			,[17,14,20]
 		],[
-			 ["Green","Yellow","Yellow"]
-			,["Green","Yellow","Yellow"]
-			,["Green","Yellow","Yellow"]
+			 [38,28,29]
+			,[37,22,23]
+			,[36,25,26]
 		],[
-			 ["Red","Red","Red"]
-			,["Red","Red","Red"]
-			,["Red","Red","Red"]
+			 [0,1,2]
+			,[30,31,32]
+			,[33,34,35]
 		],[
-			 ["Green","Green","White"]
-			,["Green","Green","White"]
-			,["Green","Green","White"]
+			 [42,39,11]
+			,[43,40,5]
+			,[44,41,8]
 		],[
-			 ["Blue","Blue","Yellow"]
-			,["Blue","Blue","Yellow"]
-			,["Blue","Blue","Yellow"]
+			 [45,46,24]
+			,[48,49,21]
+			,[51,52,27]
 		]
-	]);
-});
-test("R\'",function(){
-	var cube = new Cube();
-	cube.rotate(1,false);
-	faceTest(cube, [
-		[
-			 ["White","White","Green"]
-			,["White","White","Green"]
-			,["White","White","Green"]
-		],[
-			 ["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-		],[
-			 ["Blue","Yellow","Yellow"]
-			,["Blue","Yellow","Yellow"]
-			,["Blue","Yellow","Yellow"]
-		],[
-			 ["Red","Red","Red"]
-			,["Red","Red","Red"]
-			,["Red","Red","Red"]
-		],[
-			 ["Green","Green","Yellow"]
-			,["Green","Green","Yellow"]
-			,["Green","Green","Yellow"]
-		],[
-			 ["Blue","Blue","White"]
-			,["Blue","Blue","White"]
-			,["Blue","Blue","White"]
-		]
-	]);
-});
-test("B",function(){
-	var cube = new Cube();
-	cube.rotate(2,true);
-	faceTest(cube, [
-		[
-			 ["White","White","White"]
-			,["White","White","White"]
-			,["White","White","White"]
-		],[
-			 ["Orange","Orange","Blue"]
-			,["Orange","Orange","Blue"]
-			,["Orange","Orange","Blue"]
-		],[
-			 ["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-		],[
-			 ["Green","Red","Red"]
-			,["Green","Red","Red"]
-			,["Green","Red","Red"]
-		],[
-			 ["Orange","Orange","Orange"]
-			,["Green","Green","Green"]
-			,["Green","Green","Green"]
-		],[
-			 ["Blue","Blue","Blue"]
-			,["Blue","Blue","Blue"]
-			,["Red","Red","Red"]
-		]
-	]);
-});
-test("B\'",function(){
-	var cube = new Cube();
-	cube.rotate(2,false);
-	faceTest(cube, [
-		[
-			 ["White","White","White"]
-			,["White","White","White"]
-			,["White","White","White"]
-		],[
-			 ["Orange","Orange","Green"]
-			,["Orange","Orange","Green"]
-			,["Orange","Orange","Green"]
-		],[
-			 ["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-			,["Yellow","Yellow","Yellow"]
-		],[
-			 ["Blue","Red","Red"]
-			,["Blue","Red","Red"]
-			,["Blue","Red","Red"]
-		],[
-			 ["Red","Red","Red"]
-			,["Green","Green","Green"]
-			,["Green","Green","Green"]
-		],[
-			 ["Blue","Blue","Blue"]
-			,["Blue","Blue","Blue"]
-			,["Orange","Orange","Orange"]
-		]
-	]);
-});
-test("L",function(){
-	var cube = new Cube();
-	cube.rotate(3,true);
-	faceTest(cube, [
-		[
-			 ["Green","White","White"]
-			,["Green","White","White"]
-			,["Green","White","White"]
-		],[
-			 ["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-		],[
-			 ["Yellow","Yellow","Blue"]
-			,["Yellow","Yellow","Blue"]
-			,["Yellow","Yellow","Blue"]
-		],[
-			 ["Red","Red","Red"]
-			,["Red","Red","Red"]
-			,["Red","Red","Red"]
-		],[
-			 ["Yellow","Green","Green"]
-			,["Yellow","Green","Green"]
-			,["Yellow","Green","Green"]
-		],[
-			 ["White","Blue","Blue"]
-			,["White","Blue","Blue"]
-			,["White","Blue","Blue"]
-		]
-	]);
-});
-test("L\'",function(){
-	var cube = new Cube();
-	cube.rotate(3,false);
-	faceTest(cube, [
-		[
-			 ["Blue","White","White"]
-			,["Blue","White","White"]
-			,["Blue","White","White"]
-		],[
-			 ["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-			,["Orange","Orange","Orange"]
-		],[
-			 ["Yellow","Yellow","Green"]
-			,["Yellow","Yellow","Green"]
-			,["Yellow","Yellow","Green"]
-		],[
-			 ["Red","Red","Red"]
-			,["Red","Red","Red"]
-			,["Red","Red","Red"]
-		],[
-			 ["White","Green","Green"]
-			,["White","Green","Green"]
-			,["White","Green","Green"]
-		],[
-			 ["Yellow","Blue","Blue"]
-			,["Yellow","Blue","Blue"]
-			,["Yellow","Blue","Blue"]
-		]
-	]);
+	],true);
 });
 test("RUR",function(){
 	var cube = new Cube();
@@ -413,6 +320,37 @@ test("RUR",function(){
 		]
 	]);
 });
+test("RUR (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(1,true).rotate(4,true).rotate(1,true);
+	faceTest(cube, [
+		[
+			 [15,12,24]
+			,[3,4,21]
+			,[6,7,18]
+		],[
+			 [17,16,44]
+			,[14,13,19]
+			,[11,10,20]
+		],[
+			 [2,28,29]
+			,[37,22,23]
+			,[36,25,26]
+		],[
+			 [0,1,47]
+			,[30,31,32]
+			,[33,34,35]
+		],[
+			 [42,39,9]
+			,[43,40,50]
+			,[8,5,53]
+		],[
+			 [45,46,38]
+			,[48,49,41]
+			,[51,52,27]
+		]
+	],true);
+});
 test("RURU",function(){
 	var cube = new Cube();
 	cube.rotate(1,true).rotate(4,true).rotate(1,true).rotate(4,true);
@@ -444,6 +382,37 @@ test("RURU",function(){
 		]
 	]);
 });
+test("RURU (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(1,true).rotate(4,true).rotate(1,true).rotate(4,true);
+	faceTest(cube, [
+		[
+			 [17,16,44]
+			,[3,4,21]
+			,[6,7,18]
+		],[
+			 [2,28,29]
+			,[14,13,19]
+			,[11,10,20]
+		],[
+			 [0,1,47]
+			,[37,22,23]
+			,[36,25,26]
+		],[
+			 [15,12,24]
+			,[30,31,32]
+			,[33,34,35]
+		],[
+			 [8,43,42]
+			,[5,40,39]
+			,[53,50,9]
+		],[
+			 [45,46,38]
+			,[48,49,41]
+			,[51,52,27]
+		]
+	],true);
+});
 test("BF\'LUR",function(){
 	var cube = new Cube();
 	cube.rotate(2,true).rotate(0,false).rotate(3,true).rotate(4,true).rotate(1,true);
@@ -474,6 +443,37 @@ test("BF\'LUR",function(){
 			,["White","Red","Green"]
 		]
 	]);
+});
+test("BF\'LUR (numeric)",function(){
+	var cube = new Cube(true);
+	cube.rotate(2,true).rotate(0,false).rotate(3,true).rotate(4,true).rotate(1,true);
+	faceTest(cube, [
+		[
+			 [47,10,35]
+			,[39,4,50]
+			,[9,3,33]
+		],[
+			 [45,46,24]
+			,[16,13,21]
+			,[51,52,27]
+		],[
+			 [17,37,38]
+			,[14,22,48]
+			,[20,23,29]
+		],[
+			 [11,5,8]
+			,[34,31,28]
+			,[42,43,44]
+		],[
+			 [18,19,53]
+			,[12,40,7]
+			,[15,41,6]
+		],[
+			 [2,32,26]
+			,[1,49,25]
+			,[0,30,36]
+		]
+	],true);
 });
 test("BF\'LUR\'",function(){
 	var cube = new Cube();

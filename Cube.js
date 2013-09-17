@@ -30,7 +30,9 @@ function Cube(withNumbers) {
 		var selfMovements = Cube.SELF_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
 		for(var m in selfMovements){
 			var movement = selfMovements[m];
-			this.setTriplet(faceId, false, movement.to, selfTriplets[movement.from]);
+			var triplet = selfTriplets[movement.from];
+			if(!clockwise){ triplet = triplet.reverse(); }
+			this.setTriplet(faceId, false, movement.to, triplet);
 		}
 		
 		//NEIGHBOR TRIPLETS
@@ -50,7 +52,6 @@ function Cube(withNumbers) {
 			var relationFrom = relations[movement.from];
 			var relationTo = relations[movement.to];
 			//I need the axisIsReversed value between the FROM and TO,which is stored in the FACE_RELATIONS[movement.from], where relatedFace == movement.to
-			//var relations = Cube.FACE_RELATIONS[movement.from];
 			var neighborTriplet = neighborTriplets[movement.from];
 			var relationsFrom = Cube.FACE_RELATIONS[relationFrom.relatedFace];
 			var reverseTheTriplet;
@@ -165,8 +166,8 @@ Cube.FACE_RELATIONS = [
 		,E: {relatedFace: 1, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 3, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 	},{
-		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 2, axisIsReversed: true }
-		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
+		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 2, axisIsReversed: false }
+		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 2, axisIsReversed: true }
 		,E: {relatedFace: 2, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 0, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 	},{
@@ -175,19 +176,19 @@ Cube.FACE_RELATIONS = [
 		,E: {relatedFace: 3, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 1, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 	},{
-		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
-		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 0, axisIsReversed: true }
+		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 0, axisIsReversed: true}
+		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,E: {relatedFace: 0, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 2, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 	},{
 		 N: {relatedFace: 2, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
 		,S: {relatedFace: 0, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
-		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
-		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
+		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
+		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true}
 	},{
 		 N: {relatedFace: 0, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false}
 		,S: {relatedFace: 2, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
 		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
-		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
+		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false }
 	}
 ];
