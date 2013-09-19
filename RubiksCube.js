@@ -1,6 +1,8 @@
 function RubiksCube(withNumbers) {
 	new Observable(this);
-	this.tiles = (function(){
+	this.tiles = null;
+
+	this.reset = function(){
 		var i = 0;
 		var tiles = [];
 		for(var f=0; f<6; f++){
@@ -13,8 +15,11 @@ function RubiksCube(withNumbers) {
 				}
 			}
 		}
-		return tiles;
-	})();
+		this.tiles = tiles;
+		this.notifyObservers('reset');
+	};
+
+	this.reset();
 
 	this.isSolved = function(){
 		return this.tiles.every(function(face){
@@ -23,6 +28,22 @@ function RubiksCube(withNumbers) {
 				return c == flatface[0];
 			});
 		});
+	};
+
+	this.scramble = function(moves){
+		var moves = (typeof moves == "number") ? moves : 20;
+		if(moves > 0){
+			this.rotateRandom();
+			var cube = this;
+			setTimeout(function(){
+				cube.scramble(moves - 1);
+			}, 20);
+		}
+	};
+	this.rotateRandom = function(){
+		var faceNum = Math.floor(Math.random() * 6);
+		var clockWise = Math.floor(Math.random() * 10) < 5;
+		cube.rotate(faceNum,clockWise);
 	};
 
 	this.rotate = function(faceId,clockwise){

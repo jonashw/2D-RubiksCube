@@ -20,4 +20,14 @@ function RubiksKeyboardControls(cube){
 			}
 		});
 	});
+	document.addEventListener('keypress',function(e){
+		switch(e.keyCode){
+			case 115://s
+				cube.scramble();
+				break;
+			case 114://r
+				cube.reset();
+				break;
+		}
+	});
 }

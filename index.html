@@ -21,7 +21,7 @@
 			keyControls = new RubiksKeyboardControls(cube);
 			ctx = painter.ctx;
 			painter.paint();
-			cube.on('change',function(){
+			cube.on('reset change',function(){
 				painter.paint();
 			});
 			cube.on('change',function(){
@@ -35,9 +35,9 @@
 <body>
 	<h1>Jon's Rubiks Cube</h1>
 	<div style="text-align:center; padding:1em;">
-		Control by keyboard (JKLI,; for clockwise) (JKLI<: for counter-clockwise), 
+		Control by keyboard (jkli,; for clockwise) (Shift-jkli,; for counter-clockwise), s to scramble, r to reset
 		<br>
-		or with the controls on the left.	
+		or use the controls on the left.	
 	</div>
 	<canvas id="rubiks_canvas"></canvas>
 	<div id="controls">
