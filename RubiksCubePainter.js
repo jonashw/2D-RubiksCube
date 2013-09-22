@@ -12,8 +12,8 @@ function RubiksCubePainter(cube, canvas, width, height){
 
 	function paintFace(face, sideLength, x0, y0){
 		face.forEach(function(triplet,r){
-			triplet.forEach(function(tileColor,c){
-				ctx.fillStyle = RubiksCubePainter.COLORS[tileColor];
+			triplet.forEach(function(tile,c){
+				ctx.fillStyle = RubiksCubePainter.COLORS[tile.color];
 				ctx.fillRect((sideLength * c) + x0, (sideLength * r) + y0, sideLength, sideLength);
 				ctx.strokeStyle = RubiksCubePainter.COLORS.STROKE;
 				ctx.strokeRect((sideLength * c) + x0, (sideLength * r) + y0, sideLength, sideLength);

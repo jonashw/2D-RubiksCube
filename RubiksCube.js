@@ -1,5 +1,6 @@
 function RubiksCube(withNumbers) {
 	new Observable(this);
+	this.moveDuration = 500;
 	this.tiles = null;
 
 	this.reset = function(){
@@ -10,7 +11,7 @@ function RubiksCube(withNumbers) {
 			for(var x=0; x<3; x++){
 				tiles[f][x] = [];
 				for(var y=0; y<3; y++){
-					tiles[f][x][y] = withNumbers ? i : RubiksCube.COLORS[f];
+					tiles[f][x][y] = withNumbers ? i : { color: RubiksCube.COLORS[f] };
 					i++;
 				}
 			}
@@ -23,9 +24,15 @@ function RubiksCube(withNumbers) {
 
 	this.isSolved = function(){
 		return this.tiles.every(function(face){
-			var flatface = face.join(",").split(",");
-			return flatface.every(function(c){
-				return c == flatface[0];
+			//face is a 3x3 array
+			//flatface is a 9 array
+			var facecolors = face.reduce(function(flatface, triplet){
+				return flatface.concat(
+					triplet.map(function(tile){ return tile.color; })
+				);	
+			},[]);
+			return facecolors.every(function(color){
+				return color == facecolors[0];
 			});
 		});
 	};
@@ -46,7 +53,7 @@ function RubiksCube(withNumbers) {
 		cube.rotate(faceNum,clockWise);
 	};
 
-	this.rotate = function(faceId,clockwise){
+	this.rotate = function(faceId,clockwise,zeroTime){
 		RubiksCube.ENFORCE_VALID_FACE_ID(faceId);
 		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
 		var relations = RubiksCube.FACE_RELATIONS[faceId];
@@ -95,6 +102,7 @@ function RubiksCube(withNumbers) {
 			this.setTriplet(relationTo.relatedFace, relationTo.axisIsRow, relationTo.relatedIndex, neighborTriplet);
 		}
 		this.notifyObservers('change');
+		this.notifyObservers('moveEnd');
 		return this;
 	}
 	this.getTriplet = function(faceId, isRow, index){
