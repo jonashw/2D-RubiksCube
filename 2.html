@@ -3,26 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<title>RubiksCube</title>
+    <script src="three.min.js"></script>
 	<script type="text/javascript" src="../core/Observable.js"></script>
 	<script type="text/javascript" src="RubiksCube.js"></script>
-	<script type="text/javascript" src="RubiksCubePainter.js"></script>
+	<script type="text/javascript" src="RubiksCube3DPainter.js"></script>
 	<script type="text/javascript" src="RubiksControls.js"></script>
 	<script type="text/javascript" src="RubiksKeyboardControls.js"></script>
-	<link rel="stylesheet" href="style.css" />
 	<script type="text/javascript">
 		var cube = new RubiksCube();
 		var controls;
 		var keyControls;
 		var painter;
-		var ctx;
 		window.onload = function(){
- 			painter = new RubiksCubePainter(cube, document.getElementById("rubiks_canvas"), 500, 500);
-			controls = new RubiksControls(cube, document.getElementById("controls"));
+			painter = new RubiksCube3DPainter(cube);
 			keyControls = new RubiksKeyboardControls(cube);
-			ctx = painter.ctx;
-			painter.paint();
 			cube.on('reset change',function(){
-				painter.paint();
+				//draw();
 			});
 			cube.on('change',function(){
 				if(cube.isSolved()){
@@ -32,16 +28,5 @@
 		};
 	</script>
 </head>
-<body>
-	<h1>Jon's Rubiks Cube</h1>
-	<a href="2.html">Display 2</a>
-	<div style="text-align:center; padding:1em;">
-		Control by keyboard (jkli,; for clockwise) (Shift-jkli,; for counter-clockwise), s to scramble, r to reset
-		<br>
-		or use the controls on the left.	
-	</div>
-	<canvas id="rubiks_canvas"></canvas>
-	<div id="controls">
-	</div>
-</body>
+<body style="margin:0; padding:0;"></body>
 </html>

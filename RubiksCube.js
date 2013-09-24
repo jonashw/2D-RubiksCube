@@ -24,8 +24,6 @@ function RubiksCube(withNumbers) {
 
 	this.isSolved = function(){
 		return this.tiles.every(function(face){
-			//face is a 3x3 array
-			//flatface is a 9 array
 			var facecolors = face.reduce(function(flatface, triplet){
 				return flatface.concat(
 					triplet.map(function(tile){ return tile.color; })
