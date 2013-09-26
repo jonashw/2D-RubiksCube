@@ -13,7 +13,7 @@ function RubiksCube3DPainter(cube){
 	scene.add(camera);
 	var planes = [];
 	this.planes = planes;
- 
+
 	camera.position.y = 0;
 	camera.position.z = 600;
 	//camera.rotation.z = 10 * Math.PI / 180;
@@ -22,14 +22,6 @@ function RubiksCube3DPainter(cube){
 	camera.position.y = -100;
 	var cameraOrbiter = new Orbiter(camera.position, 200, ['x','y'], [1,0.6]);
 		//camera.lookAt(center);
-	function animate(){
-		cameraOrbiter.next();
-		//camera.lookAt(center);
-		renderer.render(scene, camera);
-        requestAnimationFrame(function(){
-            animate();
-        });
-	}
 	var transforms = [
 		 { primaryAxis: 'x', secondaryAxis: 'y', rotateAxis: 'y', rotate: 0   ,offsetAxis: 'z', offset:  1}
 		,{ primaryAxis: 'z', secondaryAxis: 'y', rotateAxis: 'y', rotate: 90  ,offsetAxis: 'x', offset:  1}
@@ -39,12 +31,14 @@ function RubiksCube3DPainter(cube){
 		,{ primaryAxis: 'x', secondaryAxis: 'z', rotateAxis: 'x', rotate: 90  ,offsetAxis: 'y', offset: -1}
 	];
 	var sideLength = 50;
+	var checkerboard = true;
 	cube.tiles.forEach(function(face,f){
 		var transform = transforms[f];
 		face.forEach(function(triplet,t){
 			triplet.forEach(function(tile,i){
+				if(checkerboard){ COLOR_NAMES.reverse(); }
 				var color = COLORS[COLOR_NAMES[f]];
-				var plane = new THREE.Mesh(new THREE.PlaneGeometry(sideLength, sideLength), new THREE.MeshBasicMaterial({color: color}));
+				var plane = new THREE.Mesh(new THREE.PlaneGeometry(sideLength, sideLength), new THREE.MeshLambertMaterial({color: color}));
 				plane.position[transform.primaryAxis]   = sideLength * (i - 1);
 				plane.position[transform.secondaryAxis] = sideLength * (t - 1);
 				plane.position[transform.offsetAxis] += (transform.offset * 1.5 * sideLength);
@@ -55,6 +49,32 @@ function RubiksCube3DPainter(cube){
 			});
 		});
 	});
+
+	//add some light!
+		[
+			 [   0, 0, 300, 1.2]//front
+			,[ 300, 0,   0, 1.2]//right
+			,[-300, 0,   0, 1.2]//left
+			,[   0, 300, 0,   1]//top
+			,[   0,-300, 0,   1]//bottom
+		].forEach(function(lightParams){
+			var light = new THREE.SpotLight(0xFFFFFF);
+			light.position.x = lightParams[0];
+			light.position.y = lightParams[1];
+			light.position.z = lightParams[2];
+			light.intensity  = lightParams[3];
+			light.castShadow = true;
+			scene.add(light);
+		});
+ 
+	function animate(){
+		cameraOrbiter.next();
+		//camera.lookAt(center);
+		renderer.render(scene, camera);
+        requestAnimationFrame(function(){
+            animate();
+        });
+	}
 	animate();
 }
 var COLOR_NAMES = ["WHITE","ORANGE","YELLOW","RED","GREEN","BLUE"];
