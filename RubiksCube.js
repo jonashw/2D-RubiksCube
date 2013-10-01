@@ -13,7 +13,7 @@ function RubiksCube(withNumbers) {
 
 	this.isSolved = function(){
 		return this.faces.every(function(face){
-			var facecolors = face.reduce(function(flatface, triplet){
+			var facecolors = face.triplets.reduce(function(flatface, triplet){
 				return flatface.concat(
 					triplet.map(function(tile){ return tile.color; })
 				);	
@@ -107,7 +107,7 @@ function RubiksCube(withNumbers) {
 		var face = self.faces[faceId];
 		for(var i=0; i<3; i++){
 			result.push(
-				isRow ? face[index][i] : face[i][index]
+				isRow ? face.triplets[index][i] : face.triplets[i][index]
 			);
 		}
 		return result;
@@ -116,20 +116,20 @@ function RubiksCube(withNumbers) {
 	function setTriplet(faceId, isRow, index, triplet){//sets a row/column triplet with a simple, length-3 array
 		if(triplet === undefined || triplet.length != 3){ throw("triplet data must be an array of size 3"); }
 		if(isRow){
-			self.faces[faceId][index] = triplet;
+			self.faces[faceId].triplets[index] = triplet;
 		} else {
-			for(var i=0; i<3; i++) self.faces[faceId][i][index] = triplet[i];
+			for(var i=0; i<3; i++) self.faces[faceId].triplets[i][index] = triplet[i];
 		}
 	}
 
 	function reset(){
 		var i = 0;
 		for(var faceNum=0; faceNum<6; faceNum++){
-			self.faces[faceNum] = [];
+			var face = self.faces[faceNum] = { triplets: [] };
 			for(var x=0; x<3; x++){
-				self.faces[faceNum][x] = [];
+				face.triplets[x] = [];
 				for(var y=0; y<3; y++){
-					self.faces[faceNum][x][y] = withNumbers ? i : { color: RubiksCube.COLORS[faceNum] };
+					face.triplets[x][y] = withNumbers ? i : { color: RubiksCube.COLORS[faceNum] };
 					i++;
 				}
 			}

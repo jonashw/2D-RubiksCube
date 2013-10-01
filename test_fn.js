@@ -8,7 +8,7 @@ function faceTest(cube,faces,numbers){
 			var tripletName = RubiksCube.TRIPLETS.HORIZONTAL[t];
 			var colors = numbers ? tripletData : tripletData.map(function(c){ return c.toUpperCase(); }).join(",");
 			deepEqual(
-				cube.faces[f][t].map(function(tile){
+				cube.faces[f].triplets[t].map(function(tile){
 					return typeof tile == "object" ? tile.color : tile;
 				})
 				,faces[f][t]

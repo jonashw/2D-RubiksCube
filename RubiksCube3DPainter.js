@@ -17,7 +17,7 @@ function RubiksCube3DPainter(cube){
 	cube.on('rotateStart',function(faceId){
 		var face = faces[faceId];
 		var distanceVector = new THREE.Vector3(sideLength,sideLength,sideLength);
-		var faceTiles = cube.faces[faceId].reduce(function(acc,face){
+		var faceTiles = cube.faces[faceId].triplets.reduce(function(acc,face){
 			return acc.concat(face);
 		},[]);
 		faceTiles.forEach(function(tile){
@@ -52,7 +52,7 @@ function RubiksCube3DPainter(cube){
 	var checkerboard = false;
 	cube.faces.forEach(function(face,f){
 		var transform = transforms[f];
-		face.forEach(function(triplet,t){
+		face.triplets.forEach(function(triplet,t){
 			triplet.forEach(function(tile,i){
 				if(checkerboard){ COLOR_NAMES.reverse(); }
 				var color = COLORS[COLOR_NAMES[f]];
@@ -64,7 +64,7 @@ function RubiksCube3DPainter(cube){
 				plane.position[transform.secondaryAxis] = sideLength * (t - 1);
 				plane.position[transform.offsetAxis] += (transform.offset * 1.5 * sideLength);
 				plane.rotation[transform.rotateAxis] = transform.rotate * Math.PI / 180;
-				cube.faces[f][t][i].plane = plane;
+				cube.faces[f].triplets[t][i].plane = plane;
 				scene.add(plane);
 				planes.push(plane);
 			});
