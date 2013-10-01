@@ -1,30 +1,18 @@
 function RubiksCube(withNumbers) {
+	//initialization
 	new Observable(this);
-	this.moveDuration = 500;
-	this.tiles = null;
+	this.faces = [];
 	var self = this;
+	reset();
 
-	this.reset = function(){
-		var i = 0;
-		var tiles = [];
-		for(var f=0; f<6; f++){
-			tiles[f] = [];
-			for(var x=0; x<3; x++){
-				tiles[f][x] = [];
-				for(var y=0; y<3; y++){
-					tiles[f][x][y] = withNumbers ? i : { color: RubiksCube.COLORS[f] };
-					i++;
-				}
-			}
-		}
-		this.tiles = tiles;
-		this.notifyObservers('reset');
-	};
-
-	this.reset();
+	//
+	// public API
+	//
+	
+	this.reset = reset;
 
 	this.isSolved = function(){
-		return this.tiles.every(function(face){
+		return this.faces.every(function(face){
 			var facecolors = face.reduce(function(flatface, triplet){
 				return flatface.concat(
 					triplet.map(function(tile){ return tile.color; })
@@ -35,6 +23,7 @@ function RubiksCube(withNumbers) {
 			});
 		});
 	};
+
 	this.scramble = function(moves){
 		var moves = (typeof moves == "number") ? moves : 20;
 		if(moves > 0){
@@ -45,82 +34,108 @@ function RubiksCube(withNumbers) {
 			}, 20);
 		}
 	};
+
 	this.rotateRandom = function(){
 		var faceNum = Math.floor(Math.random() * 6);
 		var clockWise = Math.floor(Math.random() * 10) < 5;
 		cube.rotate(faceNum,clockWise);
 	};
-	this.rotate = function(faceId,clockwise,zeroTime){
+
+	this.rotate = function(faceId,clockwise){
+		this.notifyObservers('rotateStart',faceId);
 		RubiksCube.ENFORCE_VALID_FACE_ID(faceId);
 		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
 		rotateFrontTriplets(faceId,clockwise);
 		rotateNeighborTriplets(faceId,clockwise);
+		this.notifyObservers('rotateEnd',faceId);
 		this.notifyObservers('change');
-		this.notifyObservers('moveEnd');
 		return this;
-	}
-	function rotateFrontTriplets(faceId,clockwise){//this is private because it's a helper
+	};
+
+	//
+	//private helpers
+	//
+
+	function rotateFrontTriplets(faceId,clockwise){
 		//read each triplet, save as we go
 		var selfTriplets = [];
 		for(var r=0; r<3; r++){
-			selfTriplets.push( getTriplet(faceId, true, r) );
+			selfTriplets.push( getTriplet(faceId, true, r) );//read each row
 		}
 		//set each triplet, using the data we saved, according to movement parameters
 		var selfMovements = RubiksCube.SELF_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
-		for(var m in selfMovements){
-			var movement = selfMovements[m];
+		for(var k in selfMovements){
+			var movement = selfMovements[k];
 			var triplet = selfTriplets[movement.from];
 			if(!clockwise){ triplet = triplet.reverse(); }
-			setTriplet(faceId, false, movement.to, triplet);
+			setTriplet(faceId, false, movement.to, triplet);//set each column
 		}
 	}
-	function rotateNeighborTriplets(faceId,clockwise){//this is private because it's a helper
+
+	function rotateNeighborTriplets(faceId,clockwise){
 		var relations = RubiksCube.FACE_RELATIONS[faceId];
 		var relation, movement, neighborTriplets = {};
 		//read each triplet, save as we go
-		for(var d in relations){
-			relation = relations[d];
-			neighborTriplets[d] = getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
+		for(var k in relations){
+			relation = relations[k];
+			neighborTriplets[k] = getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
 		}
 		var movements = RubiksCube.NEIGHBOR_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
 		//set each triplet, using the data we saved, according to movement parameters
-		for(var m = 0; m<4; m++){
-			movement = movements[m];
-			var relationFrom = relations[movement.from];
-			var relationTo = relations[movement.to];
+		for(var i=0; i<4; i++){
+			movement = movements[i];
+			var fromRelation = relations[movement.from];
+			var toRelation = relations[movement.to];
 			//I need the axisIsReversed value between the FROM and TO,which is stored in the FACE_RELATIONS[movement.from],
 			//	where relatedFace == movement.to
 			var neighborTriplet = neighborTriplets[movement.from];
-			var relationsFrom = RubiksCube.FACE_RELATIONS[relationFrom.relatedFace];
-			var reverseTheTriplet;
+			var relationsFrom = RubiksCube.FACE_RELATIONS[fromRelation.relatedFace];
+			var reverseTheTriplet = false;
 			for (var k in relationsFrom){
-				if(relationsFrom[k].relatedFace == relationTo.relatedFace){
+				if(relationsFrom[k].relatedFace == toRelation.relatedFace){
 					reverseTheTriplet = relationsFrom[k].axisIsReversed;
 					break;
 				}
 			}
 			if(reverseTheTriplet){ neighborTriplet = neighborTriplet.reverse(); }
-			setTriplet(relationTo.relatedFace, relationTo.axisIsRow, relationTo.relatedIndex, neighborTriplet);
+			setTriplet(toRelation.relatedFace, toRelation.axisIsRow, toRelation.relatedIndex, neighborTriplet);
 		}
 	}
-	function getTriplet(faceId, isRow, index){
+
+	function getTriplet(faceId, isRow, index){//presents a row/column triplet for a particular face as a simple, length-3 array
 		var result = [];
-		var face = self.tiles[faceId];
+		var face = self.faces[faceId];
 		for(var i=0; i<3; i++){
 			result.push(
-				isRow ?  face[index][i] : face[i][index]
+				isRow ? face[index][i] : face[i][index]
 			);
 		}
 		return result;
-	};
-	function setTriplet(faceId, isRow, index, triplet){
+	}
+
+	function setTriplet(faceId, isRow, index, triplet){//sets a row/column triplet with a simple, length-3 array
 		if(triplet === undefined || triplet.length != 3){ throw("triplet data must be an array of size 3"); }
 		if(isRow){
-			self.tiles[faceId][index] = triplet;
+			self.faces[faceId][index] = triplet;
 		} else {
-			for(var i=0; i<3; i++) self.tiles[faceId][i][index] = triplet[i];
+			for(var i=0; i<3; i++) self.faces[faceId][i][index] = triplet[i];
 		}
-	};
+	}
+
+	function reset(){
+		var i = 0;
+		for(var faceNum=0; faceNum<6; faceNum++){
+			self.faces[faceNum] = [];
+			for(var x=0; x<3; x++){
+				self.faces[faceNum][x] = [];
+				for(var y=0; y<3; y++){
+					self.faces[faceNum][x][y] = withNumbers ? i : { color: RubiksCube.COLORS[faceNum] };
+					i++;
+				}
+			}
+		}
+		self.notifyObservers('reset');
+	}
 }
 RubiksCube.SELF_MOVEMENTS = {
 	CLOCKWISE: [

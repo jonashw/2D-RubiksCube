@@ -16,12 +16,8 @@ function RubiksCube3DPainter(cube){
 
 	camera.position.y = 0;
 	camera.position.z = 600;
-	//camera.rotation.z = 10 * Math.PI / 180;
-	//camera.rotation.x = 45 * (Math.PI / 180);
-	//camera.position.x = 0;
 	camera.position.y = -100;
 	var cameraOrbiter = new Orbiter(camera.position, 200, ['x','y'], [1,0.6]);
-		//camera.lookAt(center);
 	var transforms = [
 		 { primaryAxis: 'x', secondaryAxis: 'y', rotateAxis: 'y', rotate: 0   ,offsetAxis: 'z', offset:  1}
 		,{ primaryAxis: 'z', secondaryAxis: 'y', rotateAxis: 'y', rotate: 90  ,offsetAxis: 'x', offset:  1}
@@ -32,7 +28,7 @@ function RubiksCube3DPainter(cube){
 	];
 	var sideLength = 50;
 	var checkerboard = true;
-	cube.tiles.forEach(function(face,f){
+	cube.faces.forEach(function(face,f){
 		var transform = transforms[f];
 		face.forEach(function(triplet,t){
 			triplet.forEach(function(tile,i){
@@ -43,7 +39,7 @@ function RubiksCube3DPainter(cube){
 				plane.position[transform.secondaryAxis] = sideLength * (t - 1);
 				plane.position[transform.offsetAxis] += (transform.offset * 1.5 * sideLength);
 				plane.rotation[transform.rotateAxis] = transform.rotate * Math.PI / 180;
-				cube.tiles[f][t][i].plane = plane;
+				cube.faces[f][t][i].plane = plane;
 				scene.add(plane);
 				planes.push(plane);
 			});

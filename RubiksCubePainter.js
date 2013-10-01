@@ -25,15 +25,15 @@ function RubiksCubePainter(cube, canvas, width, height){
 		ctx.save();
 		ctx.scale(0.5,0.5);
 		ctx.translate(width/2, height/2);
-		paintFace(this.cube.tiles[0],tileSize,0,0);
+		paintFace(this.cube.faces[0],tileSize,0,0);
 		ctx.save();
 		ctx.scale(0.5,1);
-		paintFace(this.cube.tiles[1],tileSize,2*width,0);
-		paintFace(this.cube.tiles[3],tileSize,-width,0);
+		paintFace(this.cube.faces[1],tileSize,2*width,0);
+		paintFace(this.cube.faces[3],tileSize,-width,0);
 		ctx.restore();
 		ctx.scale(1,0.5);
-		paintFace(this.cube.tiles[4],tileSize,0,-height);
-		paintFace(this.cube.tiles[5],tileSize,0,2*height);
+		paintFace(this.cube.faces[4],tileSize,0,-height);
+		paintFace(this.cube.faces[5],tileSize,0,2*height);
 		ctx.restore();
 	};
 }
