@@ -2,6 +2,7 @@ function RubiksCube(withNumbers) {
 	new Observable(this);
 	this.moveDuration = 500;
 	this.tiles = null;
+	var self = this;
 
 	this.reset = function(){
 		var i = 0;
@@ -34,7 +35,6 @@ function RubiksCube(withNumbers) {
 			});
 		});
 	};
-
 	this.scramble = function(moves){
 		var moves = (typeof moves == "number") ? moves : 20;
 		if(moves > 0){
@@ -50,16 +50,20 @@ function RubiksCube(withNumbers) {
 		var clockWise = Math.floor(Math.random() * 10) < 5;
 		cube.rotate(faceNum,clockWise);
 	};
-
 	this.rotate = function(faceId,clockwise,zeroTime){
 		RubiksCube.ENFORCE_VALID_FACE_ID(faceId);
 		var clockwise = typeof clockwise != "boolean" ? true : clockwise;//clockwise is the default rotation
-		var relations = RubiksCube.FACE_RELATIONS[faceId];
-		//SELF TRIPLETS
-		var selfTriplets = [];
+		rotateFrontTriplets(faceId,clockwise);
+		rotateNeighborTriplets(faceId,clockwise);
+		this.notifyObservers('change');
+		this.notifyObservers('moveEnd');
+		return this;
+	}
+	function rotateFrontTriplets(faceId,clockwise){//this is private because it's a helper
 		//read each triplet, save as we go
+		var selfTriplets = [];
 		for(var r=0; r<3; r++){
-			selfTriplets.push( this.getTriplet(faceId, true, r) );
+			selfTriplets.push( getTriplet(faceId, true, r) );
 		}
 		//set each triplet, using the data we saved, according to movement parameters
 		var selfMovements = RubiksCube.SELF_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
@@ -67,26 +71,25 @@ function RubiksCube(withNumbers) {
 			var movement = selfMovements[m];
 			var triplet = selfTriplets[movement.from];
 			if(!clockwise){ triplet = triplet.reverse(); }
-			this.setTriplet(faceId, false, movement.to, triplet);
+			setTriplet(faceId, false, movement.to, triplet);
 		}
-		
-		//NEIGHBOR TRIPLETS
-		var relation;
-		var neighborTriplets = {};
+	}
+	function rotateNeighborTriplets(faceId,clockwise){//this is private because it's a helper
+		var relations = RubiksCube.FACE_RELATIONS[faceId];
+		var relation, movement, neighborTriplets = {};
 		//read each triplet, save as we go
 		for(var d in relations){
 			relation = relations[d];
-			neighborTriplets[d] = this.getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
-			//if(relation.axisIsReversed){ neighborTriplets[d] = neighborTriplets[d].reverse(); }
+			neighborTriplets[d] = getTriplet(relation.relatedFace, relation.axisIsRow, relation.relatedIndex);
 		}
 		var movements = RubiksCube.NEIGHBOR_MOVEMENTS[clockwise ? "CLOCKWISE" : "COUNTERCLOCKWISE"];
-		var movement;
 		//set each triplet, using the data we saved, according to movement parameters
 		for(var m = 0; m<4; m++){
 			movement = movements[m];
 			var relationFrom = relations[movement.from];
 			var relationTo = relations[movement.to];
-			//I need the axisIsReversed value between the FROM and TO,which is stored in the FACE_RELATIONS[movement.from], where relatedFace == movement.to
+			//I need the axisIsReversed value between the FROM and TO,which is stored in the FACE_RELATIONS[movement.from],
+			//	where relatedFace == movement.to
 			var neighborTriplet = neighborTriplets[movement.from];
 			var relationsFrom = RubiksCube.FACE_RELATIONS[relationFrom.relatedFace];
 			var reverseTheTriplet;
@@ -97,28 +100,25 @@ function RubiksCube(withNumbers) {
 				}
 			}
 			if(reverseTheTriplet){ neighborTriplet = neighborTriplet.reverse(); }
-			this.setTriplet(relationTo.relatedFace, relationTo.axisIsRow, relationTo.relatedIndex, neighborTriplet);
+			setTriplet(relationTo.relatedFace, relationTo.axisIsRow, relationTo.relatedIndex, neighborTriplet);
 		}
-		this.notifyObservers('change');
-		this.notifyObservers('moveEnd');
-		return this;
 	}
-	this.getTriplet = function(faceId, isRow, index){
+	function getTriplet(faceId, isRow, index){
 		var result = [];
-		var face = this.tiles[faceId];
-		if(isRow){
-			for(var i=0; i<3; i++) result.push(face[index][i]);
-		} else {
-			for(var i=0; i<3; i++) result.push(face[i][index]);
+		var face = self.tiles[faceId];
+		for(var i=0; i<3; i++){
+			result.push(
+				isRow ?  face[index][i] : face[i][index]
+			);
 		}
 		return result;
 	};
-	this.setTriplet = function(faceId, isRow, index, triplet){
+	function setTriplet(faceId, isRow, index, triplet){
 		if(triplet === undefined || triplet.length != 3){ throw("triplet data must be an array of size 3"); }
 		if(isRow){
-			this.tiles[faceId][index] = triplet;
+			self.tiles[faceId][index] = triplet;
 		} else {
-			for(var i=0; i<3; i++) this.tiles[faceId][i][index] = triplet[i];
+			for(var i=0; i<3; i++) self.tiles[faceId][i][index] = triplet[i];
 		}
 	};
 }
@@ -202,7 +202,7 @@ RubiksCube.FACE_RELATIONS = [
 		,E: {relatedFace: 1, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 3, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 	},{
-		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 2, axisIsReversed: false }
+		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 2, axisIsReversed: true }
 		,E: {relatedFace: 2, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 0, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
@@ -212,7 +212,7 @@ RubiksCube.FACE_RELATIONS = [
 		,E: {relatedFace: 3, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 1, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
 	},{
-		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 0, axisIsReversed: true}
+		 N: {relatedFace: 4, axisIsRow: false, relatedIndex: 0, axisIsReversed: true }
 		,S: {relatedFace: 5, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,E: {relatedFace: 0, axisIsRow: false, relatedIndex: 0, axisIsReversed: false}
 		,W: {relatedFace: 2, axisIsRow: false, relatedIndex: 2, axisIsReversed: false}
@@ -220,11 +220,11 @@ RubiksCube.FACE_RELATIONS = [
 		 N: {relatedFace: 2, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
 		,S: {relatedFace: 0, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
 		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 0, axisIsReversed: false}
-		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true}
+		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 0, axisIsReversed: true }
 	},{
 		 N: {relatedFace: 0, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false}
 		,S: {relatedFace: 2, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
 		,E: {relatedFace: 1, axisIsRow: true,  relatedIndex: 2, axisIsReversed: true }
-		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false }
+		,W: {relatedFace: 3, axisIsRow: true,  relatedIndex: 2, axisIsReversed: false}
 	}
 ];
