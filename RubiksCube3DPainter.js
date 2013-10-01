@@ -13,6 +13,29 @@ function RubiksCube3DPainter(cube){
 	scene.add(camera);
 	var planes = [];
 	this.planes = planes;
+	var sideLength = 50;
+	cube.on('rotateStart',function(faceId){
+		var face = faces[faceId];
+		var distanceVector = new THREE.Vector3(sideLength,sideLength,sideLength);
+		var faceTiles = cube.faces[faceId].reduce(function(acc,face){
+			return acc.concat(face);
+		},[]);
+		faceTiles.forEach(function(tile){
+			new PlaneOrbit(tile.plane, face.isoCenter, face.rotationAxis).rotate(90);
+		});
+	});
+	var faces = [
+		 {rotationAxis:'z', isoCenter: new THREE.Vector3(   0,    0,  1.5), neighborCenter: new THREE.Vector3(  0,  0,  1)}
+		,{rotationAxis:'x', isoCenter: new THREE.Vector3( 1.5,    0,    0), neighborCenter: new THREE.Vector3(  1,  0,  0)}
+		,{rotationAxis:'z', isoCenter: new THREE.Vector3(   0,    0, -1.5), neighborCenter: new THREE.Vector3(  0,  0, -1)}
+		,{rotationAxis:'x', isoCenter: new THREE.Vector3( 1.5,    0,    0), neighborCenter: new THREE.Vector3( -1,  0,  0)}
+		,{rotationAxis:'y', isoCenter: new THREE.Vector3(   0,  1.5,    0), neighborCenter: new THREE.Vector3(  0,  1,  0)}
+		,{rotationAxis:'y', isoCenter: new THREE.Vector3(   0, -1.5,    0), neighborCenter: new THREE.Vector3(  0, -1,  0)}
+	];
+	faces.forEach(function(face){
+		face.isoCenter.multiplyScalar(sideLength);	
+		face.neighborCenter.multiplyScalar(sideLength);	
+	});
 
 	camera.position.y = 0;
 	camera.position.z = 600;
@@ -26,15 +49,17 @@ function RubiksCube3DPainter(cube){
 		,{ primaryAxis: 'x', secondaryAxis: 'z', rotateAxis: 'x', rotate: 270 ,offsetAxis: 'y', offset:  1}
 		,{ primaryAxis: 'x', secondaryAxis: 'z', rotateAxis: 'x', rotate: 90  ,offsetAxis: 'y', offset: -1}
 	];
-	var sideLength = 50;
-	var checkerboard = true;
+	var checkerboard = false;
 	cube.faces.forEach(function(face,f){
 		var transform = transforms[f];
 		face.forEach(function(triplet,t){
 			triplet.forEach(function(tile,i){
 				if(checkerboard){ COLOR_NAMES.reverse(); }
 				var color = COLORS[COLOR_NAMES[f]];
-				var plane = new THREE.Mesh(new THREE.PlaneGeometry(sideLength, sideLength), new THREE.MeshLambertMaterial({color: color}));
+				var plane = new THREE.Mesh(
+					 new THREE.PlaneGeometry(sideLength, sideLength)
+					,new THREE.MeshLambertMaterial({color: color, side: THREE.DoubleSide})
+				);
 				plane.position[transform.primaryAxis]   = sideLength * (i - 1);
 				plane.position[transform.secondaryAxis] = sideLength * (t - 1);
 				plane.position[transform.offsetAxis] += (transform.offset * 1.5 * sideLength);
@@ -82,9 +107,10 @@ var COLORS = {
 	,BLUE:   0x3333ff
 	,WHITE:  0xe0e0e0
 };
+//ie. rotateAroundWorldAxis(plane, new THREE.Vector3(1,-1,2), angleChange);
 function rotateAroundWorldAxis( object, axis, radians ) {
 	var rotationMatrix = new THREE.Matrix4();
-	rotationMatrix.makeRotationAxis( axis.getNormalMatrix(axis), radians );
+	rotationMatrix.makeRotationAxis( axis.normalize(), radians );
 	rotationMatrix.multiply( object.matrix );                       // pre-multiply
 	object.matrix = rotationMatrix;
 	object.rotation.setFromRotationMatrix( object.matrix );
