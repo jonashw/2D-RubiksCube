@@ -22,7 +22,7 @@
         var timeDiff = time - lastTime;
         var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
         //plane.rotation.z += angleChange;
-		rotateAroundWorldAxis(plane, new THREE.Vector3(0,1,0), angleChange);
+		rotateAroundWorldAxis(plane, new THREE.Vector3(1,-1,2), angleChange);
         lastTime = time;
  
         renderer.render(scene, camera);
@@ -44,11 +44,12 @@
       var scene = new THREE.Scene();
  
 
-	  var plane = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), new THREE.MeshNormalMaterial([
+	  var material = new THREE.MeshNormalMaterial([
 	  	new THREE.MeshBasicMaterial({side: THREE.FrontSide}),
 		new THREE.MeshBasicMaterial({side: THREE.BackSide})
-	  ]));
-	  mirrorFrontToBack(plane.geometry);
+	  ]);
+	  material.side = THREE.DoubleSide;
+	  var plane = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), material);
 
 	  plane.side = THREE.DoubleSide;
 	  plane.position.x = 100;
@@ -68,14 +69,6 @@
 			object.matrix = rotationMatrix;
 			object.rotation.setFromRotationMatrix( object.matrix );
 		}
-		  function mirrorFrontToBack(geometry){
-			for (var i = 0, len = geometry.faces.length; i < len; i++) {
-				var face = geometry.faces[i].clone();
-				face.materialIndex = 1;
-				geometry.faces.push(face);
-				geometry.faceVertexUvs[0].push(geometry.faceVertexUvs[0][i].slice(0));
-			}
-		  }
     </script>
   </body>
 </html>
